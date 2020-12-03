@@ -13,7 +13,7 @@ public class UserService {
 
     public User isCorrect(User user) {
         User sUser = userMapper.selectByName(user.getName());
-        if(CommonUtil.Password2Md5(sUser.getPassword()).equals(user.getPassword()))
+        if(CommonUtil.Password2Md5(user.getPassword()).equals(sUser.getPassword()))
             return  sUser;
         else return null;
     }
