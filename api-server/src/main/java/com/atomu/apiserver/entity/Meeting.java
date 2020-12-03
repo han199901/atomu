@@ -1,12 +1,65 @@
 package com.atomu.apiserver.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Meeting {
-    private int id;
-    private int uid;        //会议拥有者
-    private int code;        //会议码
-    private Date start;     //预订开始时间
-    private Date end;       //预订结束时间
-    private Date realEnd;   //实际结束时间 null时表示会议未结束
+    private Integer id;
+
+    private Integer uid;
+
+    private String code;
+
+    private Date start;
+
+    private Date end;
+
+    private Date realend;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code == null ? null : code.trim();
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public void setEnd(Date end) {
+        this.end = end;
+    }
+
+    public Date getRealend() {
+        return realend;
+    }
+
+    public void setRealend(Date realend) {
+        this.realend = realend;
+    }
 }

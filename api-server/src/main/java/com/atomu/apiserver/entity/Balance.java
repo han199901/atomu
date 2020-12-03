@@ -1,10 +1,45 @@
 package com.atomu.apiserver.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Balance {
-    private int id;
-    private int uid;
-    private Date expire;    //过期时间，null时永久有效
-    private int balance;    //剩余分钟数
+    private Integer id;
+
+    private Integer uid;
+
+    private Date expire;
+
+    private Integer balance;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
+    public Date getExpire() {
+        return expire;
+    }
+
+    public void setExpire(Date expire) {
+        this.expire = expire;
+    }
+
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
+    }
 }

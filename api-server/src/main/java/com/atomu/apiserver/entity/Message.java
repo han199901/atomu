@@ -1,10 +1,45 @@
 package com.atomu.apiserver.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Message {
-    private int mid;    //会议id
-    private int sender; //发送者id
-    private String content; //内容
-    private Date date;  //发送时间
+    private Integer id;
+
+    private Integer sender;
+
+    private String content;
+
+    private Date date;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getSender() {
+        return sender;
+    }
+
+    public void setSender(Integer sender) {
+        this.sender = sender;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }
