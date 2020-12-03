@@ -5,14 +5,12 @@ import java.io.Serializable;
 public class R  implements Serializable {
 
     private int code;
-    private String msg;
     private Object result;
 
 
     public static R setOK(Object result) {
         R r = new R();
-        r.setCode(1);
-        r.setMsg("操作成功");
+        r.setCode(0);
         r.setResult(result);
         return r;
     }
@@ -23,18 +21,16 @@ public class R  implements Serializable {
     }
 
 
-    public static R setError(int code,String msg,Object result) {
+    public static R setError(int code,Object result) {
         R r = new R();
         r.setCode(code);
-        r.setMsg(msg);
         r.setResult(result);
         return r;
     }
 
     public static R setError() {
         R r = new R();
-        r.setCode(0);
-        r.setMsg("操作异常");
+        r.setCode(1);
         return r;
     }
 
@@ -46,13 +42,6 @@ public class R  implements Serializable {
         this.code = code;
     }
 
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
 
     public Object getResult() {
         return result;

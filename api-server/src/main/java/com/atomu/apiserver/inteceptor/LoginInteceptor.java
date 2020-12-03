@@ -26,7 +26,7 @@ public class LoginInteceptor implements HandlerInterceptor {
                 return true;
             }
         }
-        R r = R.setError(ErrorCode.NOT_LOGIN, "您尚未登录,无法访问", null);
+        R r = R.setError(ErrorCode.NOT_LOGIN, null);
         String json = objectMapper.writeValueAsString(r);//要返回的数据
         response.addHeader("content-type", "application/json;charset=utf-8");
         response.getWriter().write(json);
