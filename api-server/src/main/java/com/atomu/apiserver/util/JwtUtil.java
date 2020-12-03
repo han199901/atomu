@@ -15,7 +15,7 @@ public class JwtUtil {
     private static final long EXPIRE_TIME = 60*60*1000;
     //TOKEN 私钥
     private static final String TOKEN_SECRET = "405c1e6d-05be-447a-8a81-ca58190185ca";
-    public static String genToken(int uid) {
+    public static String genToken(String uid) {
         Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
         Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
         Map<String, Object> header = new HashMap<>();
