@@ -9,6 +9,8 @@ import os
 
 from .api import api
 from .window_login import LoginWindow
+from .misc import dark_mode_switch
+from .config import *
 
 class Application(Gtk.Application):
     def __init__(self):
@@ -20,6 +22,10 @@ class Application(Gtk.Application):
         res = Gio.Resource.load(self.data_dir + "/client.gresource")
         Gio.Resource._register(res)
 
+        config_load()
+
+        dark_mode_switch(False)
+
     def do_startup(self):
         Gtk.Application.do_startup(self)
         w = LoginWindow(self)
@@ -28,3 +34,7 @@ class Application(Gtk.Application):
         window = self.get_active_window()
         if window:
             window.present()
+
+    def run(self):
+        Gtk.Application.run(self)
+        config_save()
