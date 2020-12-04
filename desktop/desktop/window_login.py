@@ -5,7 +5,6 @@ from gi.repository import Gtk, Gio, GLib, Gdk
 
 from .api import *
 from .window import Window
-from .user import set_code, reload_token_async
 from .asynchelper import async_function
 from .misc import dark_mode_switch
 
@@ -22,8 +21,8 @@ class LoginWindow(Window):
         dark_mode_switch(True)
 
     def on_login_clicked(self, button):
-        username = self.builder.get_object("username").get_text()
-        password = self.builder.get_object("password").get_text()
+        username = self.get("username").get_text()
+        password = self.get("password").get_text()
 
         def on_reload_token_done(r, e):
             button.set_sensitive(True)

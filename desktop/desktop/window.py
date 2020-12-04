@@ -32,6 +32,9 @@ class Window():
 
         self.window = self.builder.get_object("window")
 
+    def get(self, id):
+        return self.builder.get_object(id)
+
     def info(self, *args, **kwargs):
         _dialog(self.window, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, *args, **kwargs)
     def warn(self, *args, **kwargs):
