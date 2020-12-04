@@ -7,6 +7,7 @@ from .api import *
 from .window import Window
 from .asynchelper import async_function
 from .misc import dark_mode_switch
+from .window_main import MainWindow
 
 class LoginWindow(Window):
     def __init__(self, app):
@@ -28,6 +29,8 @@ class LoginWindow(Window):
             button.set_sensitive(True)
             try:
                 result = finish(r, e)
+                MainWindow(self.app)
+                self.window.close()
             except:
                 pass #FIXME
 
