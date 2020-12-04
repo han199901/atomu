@@ -7,12 +7,19 @@ from .api import *
 from .window import Window
 from .user import set_code, reload_token_async
 from .asynchelper import async_function
+from .misc import dark_mode_switch
 
 class LoginWindow(Window):
     def __init__(self, app):
         super().__init__(app, "login")
         self.window.set_application(app)
         self.window.show_all()
+
+    def on_help_button_clicked(self, button):
+        pass
+
+    def on_dark_switch_button_clicked(self, button):
+        dark_mode_switch(True)
 
     def on_login_clicked(self, button):
         username = self.builder.get_object("username").get_text()

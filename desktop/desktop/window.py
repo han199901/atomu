@@ -27,7 +27,6 @@ class Window():
         self.app = app
 
         self.builder = Gtk.Builder()
-        print(f"{app.res}/ui/{ui}.ui")
         self.builder.add_from_resource(f"{app.res}/ui/{ui}.ui")
         self.builder.connect_signals(self)
 
