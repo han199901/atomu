@@ -12,23 +12,6 @@ from .asynchelper import async_function
 from .misc import dark_mode_switch
 from .config import *
 
-MENU_XML = """
-<?xml version="1.0" encoding="UTF-8"?>
-<interface>
-  <menu id="app-menu">
-    <section>
-        <item>
-            <attribute name="label">About</attribute>
-            <attribute name="action">app.about</attribute>
-        </item>
-        <item>
-            <attribute name="label">Logout</attribute>
-            <attribute name="action">app.logout</attribute>
-        </item>
-    </section>
-  </menu>
-</interface>
-"""
 
 class MainWindow(Window):
     def __init__(self, app):
@@ -36,9 +19,7 @@ class MainWindow(Window):
 
         self.window.set_application(app)
 
-        self.builder.add_from_string(MENU_XML)
-
-        menu = self.builder.get_object("app-menu")
+        menu = self.get("app-menu")
         button = self.get("menu_button")
         popover = Gtk.Popover.new_from_model(button, menu)
         button.set_popover(popover)
