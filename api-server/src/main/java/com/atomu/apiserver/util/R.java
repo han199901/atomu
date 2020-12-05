@@ -30,7 +30,7 @@ public class R  implements Serializable {
 
     public static R setError() {
         R r = new R();
-        r.setCode(1);
+        r.setCode(10);
         return r;
     }
 

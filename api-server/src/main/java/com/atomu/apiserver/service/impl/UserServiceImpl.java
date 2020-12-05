@@ -35,6 +35,8 @@ public class UserServiceImpl implements UserService {
                 map.put("userObject",searchUser);
                 String auth = JwtUtil.genAuth();
                 Map<String,String> result = new HashMap<>();
+                user.setCode(auth);
+                userMapper.updateByPrimaryKey(user);
                 redisTemplate.opsForValue().set(user.getId().toString(),auth);
                 result.put("uid",user.getId().toString());
                 result.put("auth", auth);
@@ -54,6 +56,15 @@ public class UserServiceImpl implements UserService {
             return null;
         Map<String,String> res = new HashMap<>();
         String searchAuth = (String) redisTemplate.opsForValue().get(uid);
+        if(searchAuth == null || !searchAuth.equals(auth)){
+            int id;
+            try {
+                id = Integer.parseInt(uid);
+                searchAuth = userMapper.selectByPrimaryKey(id).toString();
+            } catch (Exception e) {
+                return null;
+            }
+        }
         if(searchAuth == null || !searchAuth.equals(auth))
             return null;
         String token = JwtUtil.genToken(uid);
@@ -71,5 +82,14 @@ public class UserServiceImpl implements UserService {
         user.setPassword(password);
         userMapper.insert(user);
         return 0;
+    }
+
+    public boolean logout(String authorization) {
+        String uid = JwtUtil.decode(authorization);
+        if(uid==null || uid.equals(""))
+            return false;
+        redisTemplate.delete(uid);
+        userMapper.updateNullCodeByPrimaryKey(Integer.parseInt(uid));
+        return true;
     }
 }

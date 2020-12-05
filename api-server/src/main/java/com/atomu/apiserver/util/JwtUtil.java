@@ -27,15 +27,34 @@ public class JwtUtil {
                 .withExpiresAt(date)
                 .sign(algorithm);
     }
-    public static boolean verify(String token) {
+    public static boolean verify(String authorization) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
             JWTVerifier verifier = JWT.require(algorithm).build();
+            String type = authorization.substring(0,7);
+            String token = authorization.substring(7);
+            if(!type.equals("Bearer "))
+                return false;
             DecodedJWT jwt = verifier.verify(token);
             return true;
         }
         catch (Exception exception) {
             return false;
+        }
+    }
+    public static String decode(String authorization){
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            String type = authorization.substring(0,7);
+            String token = authorization.substring(7);
+            if(!type.equals("Bearer "))
+                return null;
+            DecodedJWT jwt = verifier.verify(token);
+            return jwt.getClaim("uid").asString();
+        }
+        catch (Exception exception) {
+            return null;
         }
     }
     public static String genAuth() {

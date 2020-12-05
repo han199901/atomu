@@ -10,7 +10,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @Component
 public class LoginInteceptor implements HandlerInterceptor {
@@ -20,13 +19,13 @@ public class LoginInteceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader("Token");
+        String token = request.getHeader("Authorization");
         if (token != null) {
             if (JwtUtil.verify(token)) {
                 return true;
             }
         }
-        R r = R.setError(ErrorCode.NOT_LOGIN, null);
+        R r = R.setError(ErrorCode.TOKEN_INVALID, null);
         String json = objectMapper.writeValueAsString(r);//要返回的数据
         response.addHeader("content-type", "application/json;charset=utf-8");
         response.getWriter().write(json);

@@ -6,8 +6,9 @@ import java.util.Map;
 
 public interface UserService {
 
-    public Map<String,Object> login(User user);
-    public String getToken(Map<String, String> uidAndAuth);
-    public int register(User user);
+    Map<String,Object> login(User user);
+    String getToken(Map<String, String> uidAndAuth);
+    int register(User user);
 
+    boolean logout(String authorization);
 }
