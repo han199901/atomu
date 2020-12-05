@@ -2,3 +2,4 @@
 .*.swp
 *.gresource
 __pycache__
+desktop/mo

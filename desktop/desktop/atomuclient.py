@@ -4,6 +4,7 @@
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gio, GLib, Gdk
+import locale
 
 import os
 
@@ -14,10 +15,12 @@ from .config import *
 
 class Application(Gtk.Application):
     def __init__(self):
+        self.data_dir = os.path.dirname(__file__)
+        locale.bindtextdomain("atomudesktop", f"{self.data_dir}/mo")
+        locale.textdomain("atomudesktop")
+
         Gtk.Application.__init__(self, application_id="com.atomu.client.desktop")
         self.res = "/com/atomu/client/desktop"
-
-        self.data_dir = os.path.dirname(__file__)
 
         res = Gio.Resource.load(self.data_dir + "/client.gresource")
         Gio.Resource._register(res)

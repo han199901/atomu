@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from gi.repository import Gtk, Gio, GLib, Gdk
+from locale import gettext as _
 
 import sys
-import traceback
 
 from .api import *
 from .window import Window
@@ -68,8 +68,7 @@ class MainWindow(Window):
                 config_set("user_auth_code", None)
                 self.window.close()
             except CNetworkError:
-                traceback.print_exc()
-                self.info("Network error, please check your network connection.")
+                self.info(_("Network error, please check your network connection."))
 
         api_async("/user/logout", {
             "code": config_get("user_auth_code", None),

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from gi.repository import Gtk, Gio, GLib, Gdk
+from locale import gettext as _
 
 from .api import *
 from .window import Window
@@ -59,9 +60,9 @@ class LoginWindow(Window):
 
                 self.login()
             except CSystemError as e:
-                self.err("Login failed, please check your username and password.")
+                self.err(_("Login failed, please check your username and password."))
             except CNetworkError:
-                self.info("Network error, please check your network connection.")
+                self.info(_("Network error, please check your network connection."))
 
         button.set_sensitive(False)
         api_async("/login/login", {
