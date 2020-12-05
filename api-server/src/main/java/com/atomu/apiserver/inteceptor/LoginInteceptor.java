@@ -21,7 +21,9 @@ public class LoginInteceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
         if (token != null) {
-            if (JwtUtil.verify(token)) {
+            String uid = JwtUtil.verify(token);
+            if (uid!=null) {
+                request.setAttribute("Uid",uid);
                 return true;
             }
         }
