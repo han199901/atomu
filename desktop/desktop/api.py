@@ -13,7 +13,6 @@ __all__ = [
     "finish",
     "api_async",
     "api",
-    "_token",
     "set_code",
     "reload_token",
     "reload_token_async"
@@ -26,11 +25,11 @@ _token = None
 
 class CNetworkError(Exception):
     def __init__(self):
-        super().__init__(self)
+        super().__init__(self, "")
 
 class CSystemError(Exception):
     def __init__(self, code):
-        super().__init__(self)
+        super().__init__(self, "")
         self.code = code
 
 def finish(r, e):
@@ -52,16 +51,18 @@ def _api(endpoint, body):
         "Accept": "application/json"
     }
     if _token:
-        headers["Authorization"] = f"bearer {_token}"
+        headers["Authorization"] = f"Bearer {_token}"
     print(f"> {endpoint}: {body}")
     resp = requests.post(prefix + endpoint, json=body, headers=headers).json()
     print(resp)
     return resp
 
 def api(endpoint, body):
+    global _token
+
     resp = _api(endpoint, body)
     if "code" in resp and resp["code"] == 5:
-        _token = reload_token() #FIXME
+        _token = reload_token()
         resp = _api(endpoint, body)
 
     return resp
@@ -89,18 +90,19 @@ def reload_token():
     })
     assert "code" in resp
     assert resp["code"] == 0
+
     return resp["result"]["token"]
 
 def reload_token_async(callback):
-    global _token
-
     def on_done(r, e):
+        global _token
+
         try:
             result = finish(r, e)
             _token = result["token"]
-            API._token = _token
         except:
             pass
+
         callback(r, e)
 
     api_async("/login/token", {
