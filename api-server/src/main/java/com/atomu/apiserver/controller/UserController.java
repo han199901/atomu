@@ -5,9 +5,7 @@ import com.atomu.apiserver.util.ErrorCode;
 import com.atomu.apiserver.util.JwtUtil;
 import com.atomu.apiserver.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,9 +17,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/logout")
-    public R logout(HttpServletRequest request) {
-        String auth = request.getHeader("Authorization");
-        if(userService.logout(auth))
+    public R logout(@RequestAttribute("Uid") String uid ) {
+        if(userService.logout(uid))
             return R.setOK();
         return R.setError(ErrorCode.PERMISSION_ERROR,null);
 

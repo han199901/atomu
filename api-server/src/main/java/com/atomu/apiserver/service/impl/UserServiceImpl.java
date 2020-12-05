@@ -84,10 +84,7 @@ public class UserServiceImpl implements UserService {
         return 0;
     }
 
-    public boolean logout(String authorization) {
-        String uid = JwtUtil.decode(authorization);
-        if(uid==null || uid.equals(""))
-            return false;
+    public boolean logout(String uid) {
         redisTemplate.delete(uid);
         userMapper.updateNullCodeByPrimaryKey(Integer.parseInt(uid));
         return true;

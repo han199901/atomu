@@ -27,19 +27,19 @@ public class JwtUtil {
                 .withExpiresAt(date)
                 .sign(algorithm);
     }
-    public static boolean verify(String authorization) {
+    public static String verify(String authorization) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
             JWTVerifier verifier = JWT.require(algorithm).build();
             String type = authorization.substring(0,7);
             String token = authorization.substring(7);
             if(!type.equals("Bearer "))
-                return false;
+                return null;
             DecodedJWT jwt = verifier.verify(token);
-            return true;
+            return jwt.getClaim("uid").asString();
         }
         catch (Exception exception) {
-            return false;
+            return null;
         }
     }
     public static String decode(String authorization){
