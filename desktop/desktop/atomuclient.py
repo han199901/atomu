@@ -27,6 +27,7 @@ class Application(Gtk.Application):
 
         config_load()
 
+        Gtk.Settings.get_default().set_property("gtk-decoration-layout", "close,minimize,maximize:menu")
         dark_mode_switch(False)
 
     def do_startup(self):
