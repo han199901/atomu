@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from gi.repository import Gtk, Gio, GLib, Gdk
-from locale import gettext as _
+from gettext import gettext as _
 
 import sys
 

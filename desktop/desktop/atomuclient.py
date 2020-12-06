@@ -5,7 +5,9 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gio, GLib, Gdk
 import locale
+import gettext
 
+import ctypes
 import os
 
 from .api import api
@@ -16,8 +18,20 @@ from .config import *
 class Application(Gtk.Application):
     def __init__(self):
         self.data_dir = os.path.dirname(__file__)
-        locale.bindtextdomain("atomudesktop", f"{self.data_dir}/mo")
-        locale.textdomain("atomudesktop")
+        gettext.bindtextdomain("atomudesktop", f"{self.data_dir}/mo")
+        gettext.textdomain("atomudesktop")
+
+        if os.name == "nt":
+            libintl = ctypes.cdll.LoadLibrary("libintl-8.dll")
+            libintl.bindtextdomain.restype = ctypes.c_char_p
+            libintl.bind_textdomain_codeset.restype = ctypes.c_char_p
+            libintl.textdomain.restype = ctypes.c_char_p
+            print(libintl.bindtextdomain("atomudesktop".encode(), f"{self.data_dir}/mo".encode()))
+            print(libintl.bind_textdomain_codeset("atomudesktop".encode(), "UTF-8".encode()))
+            print(libintl.textdomain("atomudesktop".encode()))
+        else:
+            locale.bindtextdomain("atomudesktop", f"{self.data_dir}/mo")
+            locale.textdomain("atomudesktop")
 
         Gtk.Application.__init__(self, application_id="com.atomu.client.desktop")
         self.res = "/com/atomu/client/desktop"
