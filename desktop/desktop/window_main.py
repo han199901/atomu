@@ -17,6 +17,8 @@ class MainWindow(Window):
     def __init__(self, app):
         super().__init__(app, "main")
 
+        self.builder_add_file("main_menu")
+
         self.window.set_application(app)
 
         menu = self.get("app-menu")

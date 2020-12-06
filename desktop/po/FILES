@@ -1,4 +1,5 @@
 desktop/ui/login.ui
 desktop/ui/main.ui
+desktop/ui/main_menu.ui
 desktop/window_login.py
 desktop/window_main.py

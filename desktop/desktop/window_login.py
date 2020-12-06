@@ -33,7 +33,7 @@ class LoginWindow(Window):
             except CSystemError as e:
                 if e.code == 3:
                     config_set("user_auth_uid", None)
-            except:
+            except CNetworkError:
                 pass #FIXME
 
         button.set_sensitive(False)

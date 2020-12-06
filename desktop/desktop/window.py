@@ -28,10 +28,13 @@ class Window():
 
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain("atomudesktop")
-        self.builder.add_from_resource(f"{app.res}/ui/{ui}.ui")
+        self.builder_add_file(ui)
         self.builder.connect_signals(self)
 
         self.window = self.builder.get_object("window")
+
+    def builder_add_file(self, fn):
+        self.builder.add_from_resource(f"{self.app.res}/ui/{fn}.ui")
 
     def get(self, id):
         return self.builder.get_object(id)

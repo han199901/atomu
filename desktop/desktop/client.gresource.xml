@@ -3,5 +3,6 @@
   <gresource prefix="/com/atomu/client/desktop">
     <file>ui/login.ui</file>
     <file>ui/main.ui</file>
+    <file>ui/main_menu.ui</file>
   </gresource>
 </gresources>
