@@ -5,5 +5,6 @@
     <file>ui/main.ui</file>
     <file>ui/main_menu.ui</file>
     <file>ui/create_meeting.ui</file>
+    <file>ui/widget_meeting_list_row.ui</file>
   </gresource>
 </gresources>
