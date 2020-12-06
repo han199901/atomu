@@ -11,7 +11,7 @@ from .window import Window
 from .asynchelper import async_function
 from .misc import dark_mode_switch
 from .config import *
-
+from .dialog_create_meeting import CreateMeetingDialog
 
 class MainWindow(Window):
     def __init__(self, app):
@@ -35,6 +35,9 @@ class MainWindow(Window):
         app.add_action(action)
 
         self.window.show_all()
+
+    def on_create_meeting_clicked(self, button):
+        CreateMeetingDialog(self.app, self.window)
 
     def on_about(self, action, param):
         pass

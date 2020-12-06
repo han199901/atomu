@@ -4,5 +4,6 @@
     <file>ui/login.ui</file>
     <file>ui/main.ui</file>
     <file>ui/main_menu.ui</file>
+    <file>ui/create_meeting.ui</file>
   </gresource>
 </gresources>
