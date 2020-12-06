@@ -3,3 +3,4 @@
 *.gresource
 __pycache__
 desktop/mo
+desktop/build
