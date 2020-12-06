@@ -17,6 +17,8 @@ public class Meeting {
 
     private Integer id;
 
+    private String name;
+
     private Integer uid;
 
     private String code;
@@ -74,4 +76,6 @@ public class Meeting {
     public void setRealend(Date realend) {
         this.realend = realend;
     }
+
+
 }

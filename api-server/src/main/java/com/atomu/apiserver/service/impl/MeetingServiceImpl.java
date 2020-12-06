@@ -26,11 +26,17 @@ public class MeetingServiceImpl implements MeetingService {
         if(meeting.getStart().after(meeting.getEnd()))
             return null;
         List<Meeting> meetingList = this.listMeeting(meeting);
+        if(meetingList.size()>=10) {
+            Meeting res = new Meeting();
+            res.setId(-1);
+            return res;
+        }
         for(int i=0; i<meetingList.size();i++) {
             if(CommonUtil.IsInterSection(meetingList.get(i).getStart(),meetingList.get(i).getEnd(),meeting.getStart(),meeting.getEnd()))
                 return null;
         }
         meetingMapper.insertSelective(meeting);
+        meeting = meetingMapper.selectByCode(meeting);
         return meeting;
     }
 

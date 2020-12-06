@@ -10,7 +10,7 @@
     <result column="realEnd" jdbcType="TIMESTAMP" property="realend" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, uid, code, start, end, realEnd
+    id, uid, code, start, end, realEnd, name
   </sql>
 
   <select id="selectByPrimaryKey" parameterType="com.atomu.apiserver.entity.Meeting" resultMap="BaseResultMap">
@@ -45,10 +45,10 @@
   </delete>
   <insert id="insert" parameterType="com.atomu.apiserver.entity.Meeting">
     insert into meeting (id, uid, code, 
-      start, end, realEnd
+      start, end, realEnd, name
       )
     values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, 
-      #{start,jdbcType=TIMESTAMP}, #{end,jdbcType=TIMESTAMP}, #{realend,jdbcType=TIMESTAMP}
+      #{start,jdbcType=TIMESTAMP}, #{end,jdbcType=TIMESTAMP}, #{realend,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.atomu.apiserver.entity.Meeting">
@@ -72,6 +72,9 @@
       <if test="realend != null">
         realEnd,
       </if>
+      <if test="name != null">
+        name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -91,6 +94,9 @@
       </if>
       <if test="realend != null">
         #{realend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -112,6 +118,9 @@
       <if test="realend != null">
         realEnd = #{realend,jdbcType=TIMESTAMP},
       </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -121,7 +130,8 @@
       code = #{code,jdbcType=VARCHAR},
       start = #{start,jdbcType=TIMESTAMP},
       end = #{end,jdbcType=TIMESTAMP},
-      realEnd = #{realend,jdbcType=TIMESTAMP}
+      realEnd = #{realend,jdbcType=TIMESTAMP},
+      name = #{name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByCode" parameterType="com.atomu.apiserver.entity.Meeting">
@@ -141,6 +151,9 @@
       </if>
       <if test="realend != null">
         realEnd = #{realend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
     </set>
     where code = #{code,jdbcType=INTEGER}

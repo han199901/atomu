@@ -19,3 +19,5 @@ spring:
 mybatis:
   type-aliases-package: com.atomu.apiserver.entity
   mapper-locations: classpath:mapping/*.xml
+meeting:
+  max-created-num: 10

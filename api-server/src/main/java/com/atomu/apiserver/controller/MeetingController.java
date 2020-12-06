@@ -5,6 +5,7 @@ import com.atomu.apiserver.service.MeetingService;
 import com.atomu.apiserver.util.ErrorCode;
 import com.atomu.apiserver.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,9 @@ public class MeetingController {
     @Autowired
     MeetingService meetingService;
 
+    @Value("${meeting.max-created-num}")
+    Integer max_created_num;
+
     @PostMapping("/create")
     public R createMeeting(@RequestBody Meeting meeting, @RequestAttribute("Uid") String Uid) {
         int uid = Integer.parseInt(Uid);
@@ -24,6 +28,11 @@ public class MeetingController {
         Meeting result = meetingService.createMeeting(meeting);
         if(result == null)
             return R.setError(ErrorCode.INVALID_TIME,null);
+        else {
+            if (result.getId() == -1) {
+                return R.setError(ErrorCode.QUANTITY_EXCEEDS_LIMIT, null);
+            }
+        }
         return R.setOK(result);
     }
 

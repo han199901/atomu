@@ -208,7 +208,7 @@
   
   ~~~
 
-- http://help.hanblog.fun/api/meeting/over
+- http://help.hanblog.fun/api/meeting/over  // live/over
 
   ~~~json
   Method: post
