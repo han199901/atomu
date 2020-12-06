@@ -3,6 +3,16 @@ package com.atomu.apiserver.entity;
 import java.util.Date;
 
 public class Message {
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", sender=" + sender +
+                ", content='" + content + '\'' +
+                ", date=" + date +
+                '}';
+    }
+
     private Integer id;
 
     private Integer sender;

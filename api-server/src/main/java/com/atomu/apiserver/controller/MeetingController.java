@@ -1,9 +1,75 @@
 package com.atomu.apiserver.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.atomu.apiserver.entity.Meeting;
+import com.atomu.apiserver.service.MeetingService;
+import com.atomu.apiserver.util.ErrorCode;
+import com.atomu.apiserver.util.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
+@RequestMapping("/api/meeting")
 public class MeetingController {
+
+    @Autowired
+    MeetingService meetingService;
+
+    @PostMapping("/create")
+    public R createMeeting(@RequestBody Meeting meeting, @RequestAttribute("Uid") String Uid) {
+        int uid = Integer.parseInt(Uid);
+        meeting.setUid(uid);
+        Meeting result = meetingService.createMeeting(meeting);
+        if(result == null)
+            return R.setError(ErrorCode.INVALID_TIME,null);
+        return R.setOK(result);
+    }
+
+    @PostMapping("/cancel")
+    public R cancelMeeting(@RequestBody Meeting meeting , @RequestAttribute("Uid") String Uid) {
+        int uid = Integer.parseInt(Uid);
+        meeting.setUid(uid);
+        int code = meetingService.cancelMeeting(meeting);
+        if(code == 0)
+            return R.setOK();
+        else
+            return R.setError(code,null);
+    }
+
+    @GetMapping("/search/{code}")
+    public R searchMeeting(@PathVariable String code) {
+        Meeting meeting = new Meeting();
+        meeting.setCode(code);
+        Meeting searchedMeeting = meetingService.searchMeetingByCode(meeting);
+        if(searchedMeeting == null)
+            return R.setError(ErrorCode.NO_MEETING,null);
+        else
+            return R.setOK(searchedMeeting);
+    }
+
+    @PostMapping("/list")
+    public R listMeeting(HttpServletRequest request) {
+        Meeting meeting = new Meeting();
+        meeting.setUid(Integer.parseInt((String) request.getAttribute("Uid")));
+        List<Meeting> meetingArrayList = meetingService.listMeeting(meeting);
+        if(meetingArrayList.size()==0)
+            return R.setError(ErrorCode.NO_MEETING,null);
+        else
+            return R.setOK(meetingArrayList);
+    }
+
+    @PostMapping("/over")
+    public R overMeeting(@RequestBody Meeting meeting) {
+        int code = meetingService.overMeeting(meeting);
+        if(code == 0)
+            return R.setOK();
+        else
+            return R.setError(code,null);
+
+    }
+
 
 }
 

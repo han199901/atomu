@@ -3,6 +3,16 @@ package com.atomu.apiserver.entity;
 import java.util.Date;
 
 public class Balance {
+    @Override
+    public String toString() {
+        return "Balance{" +
+                "id=" + id +
+                ", uid=" + uid +
+                ", expire=" + expire +
+                ", balance=" + balance +
+                '}';
+    }
+
     private Integer id;
 
     private Integer uid;

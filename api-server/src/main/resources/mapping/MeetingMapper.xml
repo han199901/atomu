@@ -12,15 +12,36 @@
   <sql id="Base_Column_List">
     id, uid, code, start, end, realEnd
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+
+  <select id="selectByPrimaryKey" parameterType="com.atomu.apiserver.entity.Meeting" resultMap="BaseResultMap">
+    select
     <include refid="Base_Column_List" />
     from meeting
-    where id = #{id,jdbcType=INTEGER}
+    where uid = #{uid,jdbcType=INTEGER} AND end > #{end,jdbcType=TIMESTAMP}
+  </select>
+
+  <select id="selectByUid" parameterType="java.lang.Integer" resultType="com.atomu.apiserver.entity.Meeting">
+    select
+    <include refid="Base_Column_List" />
+    from meeting
+    where uid = #{uid,jdbcType=INTEGER} AND end > #{end,jdbcType=TIMESTAMP}
+  </select>
+
+
+  <select id="selectByCode" parameterType="com.atomu.apiserver.entity.Meeting" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from meeting
+    where code = #{code,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from meeting
     where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteByCode" parameterType="com.atomu.apiserver.entity.Meeting">
+    delete from meeting
+    where code = #{code,jdbcType=VARCHAR} AND uid = #{uid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.atomu.apiserver.entity.Meeting">
     insert into meeting (id, uid, code, 
@@ -102,5 +123,26 @@
       end = #{end,jdbcType=TIMESTAMP},
       realEnd = #{realend,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByCode" parameterType="com.atomu.apiserver.entity.Meeting">
+    update meeting
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="start != null">
+        start = #{start,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end != null">
+        end = #{end,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realend != null">
+        realEnd = #{realend,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where code = #{code,jdbcType=INTEGER}
   </update>
 </mapper>

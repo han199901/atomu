@@ -1,6 +1,16 @@
 package com.atomu.apiserver.entity;
 
 public class User {
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
+
     private Integer id;
 
     private String name;

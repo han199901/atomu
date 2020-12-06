@@ -3,6 +3,18 @@ package com.atomu.apiserver.entity;
 import java.util.Date;
 
 public class Meeting {
+    @Override
+    public String toString() {
+        return "Meeting{" +
+                "id=" + id +
+                ", uid=" + uid +
+                ", code='" + code + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                ", realend=" + realend +
+                '}';
+    }
+
     private Integer id;
 
     private Integer uid;

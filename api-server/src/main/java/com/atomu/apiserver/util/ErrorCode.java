@@ -8,5 +8,12 @@ public interface ErrorCode {
     int USER_NAME_OR_PASSWORD_ERROR = 4;
     int TOKEN_INVALID = 5;
     int PERMISSION_ERROR = 6;
-    int ERROR = 10;
+
+    int NO_MEETING = 10;
+    int INVALID_TIME = 11;
+    int MEETING_CODE_NOT_FOUND = 12;
+    int MEETING_IS_ENDED = 13;
+
+    int UNABLE_TO_PARSE_SUBMITTED_DATA=1000;
+
 }
