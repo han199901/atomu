@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-06 04:21+0800\n"
+"POT-Creation-Date: 2020-12-07 04:09+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,20 +34,41 @@ msgid ""
 "<a href=\"www.google.com\">Register Now</a>"
 msgstr ""
 
+msgid "Create a new meeting"
+msgstr "创建一个新会议"
+
+msgid "My meetings"
+msgstr "我的会议"
+
+msgid "label"
+msgstr ""
+
+msgid "Join meeting"
+msgstr "加入会议"
+
 msgid "About"
 msgstr "关于"
 
 msgid "Logout"
 msgstr "退出"
 
-msgid "label"
-msgstr ""
+msgid "Meeting name"
+msgstr "会议名称"
 
-msgid "My meetings"
-msgstr ""
+msgid "Beginning time"
+msgstr "开始于"
 
-msgid "Join meeting"
-msgstr ""
+msgid "Meeting length"
+msgstr "会议时长"
+
+msgid "Minute"
+msgstr "分钟"
+
+msgid "Hour:"
+msgstr "在 ... 时："
+
+msgid "Minute:"
+msgstr "在 ... 分："
 
 msgid "Login failed, please check your username and password."
 msgstr "登录失败，请检查你的用户名和密码。"
