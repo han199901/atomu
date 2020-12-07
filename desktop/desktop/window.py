@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from gi.repository import Gtk, Gio, GLib, Gdk
+from gettext import gettext as _
+
+from .api import *
 
 def _dialog(tfor ,mtype, buttons, text, subtext = None, markup = False):
     dialog = Gtk.MessageDialog(
@@ -22,6 +25,15 @@ def _dialog(tfor ,mtype, buttons, text, subtext = None, markup = False):
     dialog.destroy()
     return value
 
+errmap = {
+    5: "FIXME", # never should be 5
+    4: _("Login failed, please check your username and password."),
+    6: _("Permision denied"),
+    10: _("No such meeting"),
+    12: _("Meeting datetime overlap"),
+    13: _("Meeting is expired"),
+}
+
 class Window():
     def __init__(self, app, ui):
         self.app = app
@@ -38,6 +50,15 @@ class Window():
 
     def get(self, id):
         return self.builder.get_object(id)
+
+    def defexphandler(self, e):
+        if isinstance(e, CNetworkError):
+            self.info(_("Network error, please check your network connection."))
+        elif isinstance(e, CSystemError):
+            msg = _("Unknown error")
+            if e.code in errmap:
+                msg = errmap[e.code]
+            self.err(msg)
 
     def info(self, *args, **kwargs):
         _dialog(self.window, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, *args, **kwargs)

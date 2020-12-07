@@ -33,8 +33,10 @@ class LoginWindow(Window):
             except CSystemError as e:
                 if e.code == 3:
                     config_set("user_auth_uid", None)
-            except CNetworkError:
-                pass #FIXME
+                else:
+                    self.defexphandler(e)
+            except CError as e:
+                self.defexphandler(e)
 
         button.set_sensitive(False)
         reload_token_async(on_reload_token_done)
@@ -59,10 +61,8 @@ class LoginWindow(Window):
                 config_set("user_auth_code", result["auth"])
 
                 self.login()
-            except CSystemError as e:
-                self.err(_("Login failed, please check your username and password."))
-            except CNetworkError:
-                self.info(_("Network error, please check your network connection."))
+            except CError as e:
+                self.defexphandler(e)
 
         button.set_sensitive(False)
         api_async("/login/login", {

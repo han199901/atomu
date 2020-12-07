@@ -8,6 +8,7 @@ import requests
 from .asynchelper import async_function
 
 __all__ = [
+    "CError",
     "CNetworkError",
     "CSystemError",
     "finish",
@@ -23,13 +24,17 @@ _uid = None
 _code = None
 _token = None
 
-class CNetworkError(Exception):
+class CError(Exception):
     def __init__(self):
-        super().__init__(self, "")
+        super().__init__()
 
-class CSystemError(Exception):
+class CNetworkError(CError):
+    def __init__(self):
+        super().__init__()
+
+class CSystemError(CError):
     def __init__(self, code):
-        super().__init__(self, "")
+        super().__init__()
         self.code = code
 
 def finish(r, e):
