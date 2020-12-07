@@ -7,6 +7,11 @@
     <property name="can_focus">False</property>
     <property name="icon_name">edit-delete-symbolic</property>
   </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">emblem-shared-symbolic</property>
+  </object>
   <template class="MeetingListRow" parent="GtkBox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -54,6 +59,9 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes">label</property>
             <property name="wrap">True</property>
+            <style>
+              <class name="separator"/>
+            </style>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -108,9 +116,4 @@
       </packing>
     </child>
   </template>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">emblem-shared-symbolic</property>
-  </object>
 </interface>

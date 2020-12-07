@@ -5,13 +5,16 @@ from gi.repository import Gtk, Gio, GLib, Gdk
 from gettext import gettext as _
 
 import sys
+from iso8601 import parse_date
+from datetime import datetime, timezone
 
 from .api import *
 from .window import Window
 from .asynchelper import async_function
-from .misc import dark_mode_switch
+from .misc import dark_mode_switch, format_date_ml, sharelink
 from .config import *
 from .dialog_create_meeting import CreateMeetingDialog
+from .widget_meeting_list_row import MeetingListRow
 
 class MainWindow(Window):
     def __init__(self, app):
@@ -20,6 +23,8 @@ class MainWindow(Window):
         self.builder_add_file("main_menu")
 
         self.window.set_application(app)
+
+        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
         menu = self.get("app-menu")
         button = self.get("menu_button")
@@ -34,10 +39,73 @@ class MainWindow(Window):
         action.connect("activate", self.on_logout)
         app.add_action(action)
 
+        self.list_all_my_meetings()
+
         self.window.show_all()
 
+    def on_meeting_delete_clicked(self, button, row, id, code):
+        def on_done(r, e):
+            try:
+                result = finish(r, e)
+                lb = self.get("listbox_meetings")
+                lb.remove(row.get_parent())
+            except CError as e:
+                self.defexphandler(e)
+
+        api_async("/meeting/cancel", {
+            "id": id
+        }, on_done)
+
+    def on_meeting_share_clicked(self, button, id, code):
+        self.clipboard.set_text(sharelink(id, code), -1)
+
+        def infobar_response(infobar, rid, data):
+            if rid == Gtk.ResponseType.CLOSE:
+                infobar.destroy()
+
+        def infobar_timeout(infobar):
+            infobar.destroy()
+
+        infobar = Gtk.InfoBar.new()
+        infobar.set_show_close_button(True)
+        infobar.set_message_type(Gtk.MessageType.INFO)
+        infobar.get_content_area().pack_start(Gtk.Label.new(_("Shared link copied to clipboard")), False, True, 0)
+        infobar.connect("response", infobar_response, None)
+
+        self.get("main_box").pack_start(infobar, False, True, 0)
+        infobar.show_all()
+
+        GLib.timeout_add(5000, infobar_timeout, infobar)
+
+    def list_all_my_meetings(self):
+        lb = self.get("listbox_meetings")
+        for i in lb.get_children():
+            lb.remove(i)
+
+        def on_done(r, e):
+            try:
+                result = finish(r, e)
+
+                if result:
+                    for i in result:
+                        if "name" not in i or i["name"] == None or i["name"] == "":
+                            i["name"] = _("Unnamed meeting")
+
+                        lr = MeetingListRow()
+                        lr.title.set_text(i["name"])
+                        btime = parse_date(i["start"])
+                        etime = parse_date(i["end"])
+                        lr.description.set_text(format_date_ml(btime, etime))
+                        lr.delete.connect("clicked", self.on_meeting_delete_clicked, lr, i["id"], i["code"])
+                        lr.share.connect("clicked", self.on_meeting_share_clicked, i["id"], i["code"])
+                        lb.add(lr)
+            except CError as e:
+                self.defexphandler(e)
+
+        api_async("/meeting/list", {}, on_done)
+
     def on_create_meeting_clicked(self, button):
-        CreateMeetingDialog(self.app, self.window)
+        CreateMeetingDialog(self)
 
     def on_about(self, action, param):
         pass
@@ -53,8 +121,8 @@ class MainWindow(Window):
                 config_set("user_auth_uid", None)
                 config_set("user_auth_code", None)
                 self.window.close()
-            except CNetworkError:
-                self.info(_("Network error, please check your network connection."))
+            except CError:
+                self.defexphandler(e)
 
         api_async("/user/logout", {
             "code": config_get("user_auth_code", None),
