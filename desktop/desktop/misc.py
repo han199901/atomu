@@ -23,7 +23,7 @@ def dark_mode_switch(switch):
 
 def format_date(date, cur):
     tmp = date - cur
-    if tmp.days == 0:
+    if tmp.days <= 0:
         return date.strftime("%H:%M")
     #elif tmp.year == 0:
     #    return date.strftime(_("%d %b %H:%M"))
@@ -34,13 +34,13 @@ def format_date_ml(begin, end):
     cur = datetime.now(tz)
     begin = begin.astimezone(tz=tz)
     end = end.astimezone(tz=tz)
-    print(cur)
-    print(begin)
-    print(end)
     f = format_date(begin, cur)
     t = format_date(end, cur)
 
-    return _("From %s, to %s") % (f, t)
+    return _("From %(from)s, to %(to)s") % ({
+        "from": f,
+        "to": t
+    })
 
 def sharelink(id, code):
     return f"http://help.hanblog.fun/join/{id}:{code}"
