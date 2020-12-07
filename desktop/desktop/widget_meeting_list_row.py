@@ -10,6 +10,7 @@ class MeetingListRow(Gtk.Box):
     title = Gtk.Template.Child()
     description = Gtk.Template.Child()
     delete = Gtk.Template.Child()
+    share = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
