@@ -65,11 +65,11 @@ public class MeetingServiceImpl implements MeetingService {
     public List<Meeting> listMeeting(Meeting meeting) {
         if(meeting==null || meeting.getUid()==null)
             return null;
-        if(meeting.getEnd()==null) {
-            Date date = new Date(System.currentTimeMillis());
-            meeting.setEnd(date);
-        }
-        List<Meeting> meetingArrayList = meetingMapper.selectByUid(meeting);
+        Meeting temp = new Meeting();
+        temp.setUid(meeting.getUid());
+        Date date = new Date(System.currentTimeMillis());
+        temp.setEnd(date);
+        List<Meeting> meetingArrayList = meetingMapper.selectByUid(temp);
         return meetingArrayList;
     }
 
