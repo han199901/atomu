@@ -47,8 +47,8 @@ class MainWindow(Window):
         def on_done(r, e):
             try:
                 result = finish(r, e)
-                #self.list_all_my_meetings()
-                row.destroy()
+                lb = self.get("listbox_meetings")
+                lb.remove(row.get_parent())
             except CError as e:
                 self.defexphandler(e)
 
