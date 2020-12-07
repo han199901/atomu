@@ -8,13 +8,13 @@ import java.util.List;
 
 @Mapper
 public interface MeetingMapper {
-    int deleteByPrimaryKey(Integer id);
 
+    int deleteByPrimaryKey(Meeting record);
     int insert(Meeting record);
 
     int insertSelective(Meeting record);
 
-    Meeting selectByPrimaryKey(Integer id);
+    Meeting selectByPrimaryKey(Meeting record);
 
     int updateByPrimaryKeySelective(Meeting record);
 
@@ -22,9 +22,9 @@ public interface MeetingMapper {
 
     int deleteByCode(Meeting record);
 
-    Meeting selectByCode(Meeting meeting);
+    Meeting selectByCode(Meeting record);
 
-    List<Meeting> selectByUid(int uid);
+    List<Meeting> selectByUid(Meeting record);
 
-    int updateByCode(Meeting meeting);
+    int updateByCode(Meeting record);
 }

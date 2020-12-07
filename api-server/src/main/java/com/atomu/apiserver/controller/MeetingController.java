@@ -27,7 +27,7 @@ public class MeetingController {
         meeting.setUid(uid);
         Meeting result = meetingService.createMeeting(meeting);
         if(result == null)
-            return R.setError(ErrorCode.INVALID_TIME,null);
+            return R.setError(ErrorCode.UNABLE_TO_PARSE_SUBMITTED_DATA,null);
         else {
             if (result.getId() == -1) {
                 return R.setError(ErrorCode.QUANTITY_EXCEEDS_LIMIT, null);
@@ -64,7 +64,7 @@ public class MeetingController {
         meeting.setUid(Integer.parseInt((String) request.getAttribute("Uid")));
         List<Meeting> meetingArrayList = meetingService.listMeeting(meeting);
         if(meetingArrayList.size()==0)
-            return R.setError(ErrorCode.NO_MEETING,null);
+            return R.setOK(null);
         else
             return R.setOK(meetingArrayList);
     }

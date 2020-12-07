@@ -17,14 +17,14 @@
     select
     <include refid="Base_Column_List" />
     from meeting
-    where uid = #{uid,jdbcType=INTEGER} AND end > #{end,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="selectByUid" parameterType="java.lang.Integer" resultType="com.atomu.apiserver.entity.Meeting">
+  <select id="selectByUid" parameterType="com.atomu.apiserver.entity.Meeting" resultType="com.atomu.apiserver.entity.Meeting">
     select
     <include refid="Base_Column_List" />
     from meeting
-    where uid = #{uid,jdbcType=INTEGER} AND end > #{end,jdbcType=TIMESTAMP}
+    where uid = #{uid,jdbcType=INTEGER} AND end > #{end,jdbcType=TIMESTAMP} ORDER BY `start`
   </select>
 
 
@@ -34,11 +34,10 @@
     from meeting
     where code = #{code,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="com.atomu.apiserver.entity.Meeting">
     delete from meeting
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} AND uid = #{uid,jdbcType=INTEGER}
   </delete>
-
   <delete id="deleteByCode" parameterType="com.atomu.apiserver.entity.Meeting">
     delete from meeting
     where code = #{code,jdbcType=VARCHAR} AND uid = #{uid,jdbcType=INTEGER}

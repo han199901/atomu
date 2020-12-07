@@ -42,9 +42,11 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public int cancelMeeting(Meeting meeting) {
-        if(meeting==null || meeting.getCode() == null)
+        if(meeting==null || meeting.getId() == null)
             return ErrorCode.UNABLE_TO_PARSE_SUBMITTED_DATA;
-        int num = meetingMapper.deleteByCode(meeting);
+        if(meetingMapper.selectByPrimaryKey(meeting).getRealend()==null)
+            return ErrorCode.MEETING_IS_ENDED;
+        int num = meetingMapper.deleteByPrimaryKey(meeting);
         if(num==1)
             return 0;
         else
@@ -61,13 +63,13 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public List<Meeting> listMeeting(Meeting meeting) {
-        if(meeting==null)
+        if(meeting==null || meeting.getUid()==null)
             return null;
         if(meeting.getEnd()==null) {
             Date date = new Date(System.currentTimeMillis());
             meeting.setEnd(date);
         }
-        List<Meeting> meetingArrayList = meetingMapper.selectByUid(meeting.getUid());
+        List<Meeting> meetingArrayList = meetingMapper.selectByUid(meeting);
         return meetingArrayList;
     }
 
