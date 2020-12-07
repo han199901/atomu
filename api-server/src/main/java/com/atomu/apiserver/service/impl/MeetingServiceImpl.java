@@ -44,7 +44,7 @@ public class MeetingServiceImpl implements MeetingService {
     public int cancelMeeting(Meeting meeting) {
         if(meeting==null || meeting.getId() == null)
             return ErrorCode.UNABLE_TO_PARSE_SUBMITTED_DATA;
-        if(meetingMapper.selectByPrimaryKey(meeting).getRealend()==null)
+        if(meetingMapper.selectByPrimaryKey(meeting).getRealend()!=null)
             return ErrorCode.MEETING_IS_ENDED;
         int num = meetingMapper.deleteByPrimaryKey(meeting);
         if(num==1)
