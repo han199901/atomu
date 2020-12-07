@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-07 04:09+0800\n"
+"POT-Creation-Date: 2020-12-07 10:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,5 +73,32 @@ msgstr "在 ... 分："
 msgid "Login failed, please check your username and password."
 msgstr "登录失败，请检查你的用户名和密码。"
 
+msgid "Permision denied"
+msgstr "拒绝访问"
+
+msgid "No such meeting"
+msgstr "会议不存在"
+
+msgid "Meeting datetime overlap"
+msgstr "会议的日期时间重叠"
+
+msgid "Meeting is expired"
+msgstr "会议已失效"
+
 msgid "Network error, please check your network connection."
 msgstr "网络错误，请检查你的网络连接。"
+
+msgid "Unknown error"
+msgstr "未知错误"
+
+msgid "Shared link copied to clipboard"
+msgstr "分享链接已复制到剪贴板"
+
+msgid "Unnamed meeting"
+msgstr "未命名的会议"
+
+msgid "%d %b %Y %H:%M"
+msgstr "%Y年%m月%d日 %H:%M"
+
+msgid "From %(from)s, to %(to)s"
+msgstr "从 %(from)s，到 %(to)s"

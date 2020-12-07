@@ -2,5 +2,8 @@ desktop/ui/login.ui
 desktop/ui/main.ui
 desktop/ui/main_menu.ui
 desktop/ui/create_meeting.ui
+desktop/window.py
 desktop/window_login.py
 desktop/window_main.py
+desktop/misc.py
+desktop/dialog_create_meeting.py
