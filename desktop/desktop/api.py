@@ -76,7 +76,7 @@ def api_async(endpoint, body, callback):
     def on_done(resp, error):
         callback(resp, error)
 
-    @async_function(on_done=on_done)
+    @async_function(on_done)
     def call_api(endpoint, body):
         return api(endpoint, body)
 
