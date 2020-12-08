@@ -10,7 +10,7 @@ public interface MeetingService {
 
     int cancelMeeting(Meeting meeting);
 
-    Meeting searchMeetingByCode(Meeting meeting);
+    Meeting searchMeetingById(Meeting meeting);
 
     List<Meeting> listMeeting(Meeting meeting);
 

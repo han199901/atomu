@@ -13,6 +13,7 @@ public interface ErrorCode {
     int INVALID_TIME = 11;
     int QUANTITY_EXCEEDS_LIMIT = 12;
     int MEETING_IS_ENDED = 13;
+    int MEETING_IS_NOT_START = 14;
 
     int UNABLE_TO_PARSE_SUBMITTED_DATA=1000;
 

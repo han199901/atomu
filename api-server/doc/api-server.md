@@ -10,6 +10,7 @@
     int NO_MEETING = 10;
     int INVALID_TIME = 11;
     int MEETING_IS_ENDED = 13;
+    int MEETING_IS_NOT_START = 14;
 
     int UNABLE_TO_PARSE_SUBMITTED_DATA=1000;
 ~~~
@@ -225,6 +226,52 @@
       "result": null
   }
   
+  ~~~
+
+
+### /api/room
+
+- http://help.hanblog.fun/api/room/enter
+
+  ~~~json
+  Method: POST
+  {"id":"会议ID","code":"会议码"}
+  
+  成功返回：
+  {
+      "code": 0,
+      "result": {
+          "msgserver": {
+              "id": 1,
+              "ip": "255.255.255.255",
+              "ip6": "255.255.255.255"
+          },
+          "meeting": {
+              "id": 47,
+              "name": null,
+              "uid": 1,
+              "code": "c3bf804fcacb4cbf98395855245d73a5",
+              "start": "2019-12-06T15:28:52.000+00:00",
+              "end": "2019-12-06T15:58:52.000+00:00",
+              "realend": null
+          },
+          "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxIiwibWlkIjoiNDciLCJleHAiOjE2MDc0NDA2OTd9.QY2_BpZrhMFgSoo1lAfjuhN-PLwD7lWTX6W0OBnwQ_w"
+      }
+  }
+  失败返回：
+  {
+    "code": 14, //10 无改会议 13 会未开始 14 会议已结束
+    "result": {
+        "id": 47,
+        "name": null,
+        "uid": 1,
+        "code": "c3bf804fcacb4cbf98395855245d73a5",
+        "start": "2019-12-06T15:28:52.000+00:00",
+        "end": "2019-12-06T15:58:52.000+00:00",
+        "realend": null
+    }
+}
+
   ~~~
 
   

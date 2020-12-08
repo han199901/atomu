@@ -1,14 +1,12 @@
 package com.atomu.apiserver.util;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class JwtUtil {
     //一小时过期
@@ -25,6 +23,19 @@ public class JwtUtil {
                 .withHeader(header)
                 .withClaim("uid",uid)
                 .withExpiresAt(date)
+                .sign(algorithm);
+    }
+    public static String genToken(Map<String, String> map) {
+        Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
+        Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+        Map<String, Object> header = new HashMap<>();
+        header.put("typ","JWT");
+        header.put("alg","HS256");
+        JWTCreator.Builder token = JWT.create().withHeader(header);
+        for(String key : map.keySet()) {
+            token.withClaim(key,map.get(key));
+        }
+        return  token.withExpiresAt(date)
                 .sign(algorithm);
     }
     public static String verify(String authorization) {

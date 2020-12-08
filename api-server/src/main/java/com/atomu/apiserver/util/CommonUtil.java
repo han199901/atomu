@@ -13,6 +13,9 @@ public class CommonUtil {
     public static String genUUID() {
         return UUID.randomUUID().toString();
     }
+    public static String genUUIDSimple() {
+        return UUID.randomUUID().toString().replaceAll("-","");
+    }
     /***
      *
      * @param startDateOne 第一个时间段的开始时间

@@ -47,16 +47,6 @@ public class MeetingController {
             return R.setError(code,null);
     }
 
-    @GetMapping("/search/{code}")
-    public R searchMeeting(@PathVariable String code) {
-        Meeting meeting = new Meeting();
-        meeting.setCode(code);
-        Meeting searchedMeeting = meetingService.searchMeetingByCode(meeting);
-        if(searchedMeeting == null)
-            return R.setError(ErrorCode.NO_MEETING,null);
-        else
-            return R.setOK(searchedMeeting);
-    }
 
     @PostMapping("/list")
     public R listMeeting(HttpServletRequest request) {

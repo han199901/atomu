@@ -50,7 +50,7 @@
       #{start,jdbcType=TIMESTAMP}, #{end,jdbcType=TIMESTAMP}, #{realend,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.atomu.apiserver.entity.Meeting">
+  <insert id="insertSelective" useGeneratedKeys="true" parameterType="com.atomu.apiserver.entity.Meeting"  keyProperty="id" keyColumn="id">
     insert into meeting
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
