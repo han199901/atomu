@@ -99,10 +99,14 @@ class MainWindow(Window):
                         lr.delete.connect("clicked", self.on_meeting_delete_clicked, lr, i["id"], i["code"])
                         lr.share.connect("clicked", self.on_meeting_share_clicked, i["id"], i["code"])
                         lb.add(lr)
+            except CNetworkError as e:
+                print("network error, will re-try soon ...")
+                GLib.timeout_add_seconds(2, self.list_all_my_meetings)
             except CError as e:
                 self.defexphandler(e)
 
         api_async("/meeting/list", {}, on_done)
+        return False
 
     def on_create_meeting_clicked(self, button):
         CreateMeetingDialog(self)
