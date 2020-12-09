@@ -8,6 +8,7 @@ import com.atomu.apiserver.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.CredentialNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,16 @@ public class RoomController {
         if (res.get("code")!=null)
             return R.setError((int)res.get("code"),res.get("errResult"));
         return R.setOK(res);
+    }
+    @PostMapping("/close")
+    public R close(@RequestBody Meeting meeting, @RequestAttribute("Uid") String Uid) {
+        int uid = Integer.parseInt(Uid);
+        meeting.setUid(uid);
+        int res = roomService.closeRoom(meeting);
+        if(res!=0)
+            return R.setError(res,null);
+        else
+            return R.setOK();
     }
 
 }

@@ -53,10 +53,32 @@ public class RoomServiceImpl implements RoomService {
         Map<String,String> map = new HashMap<>();
         map.put("uid",meeting.getUid().toString());
         map.put("mid",searched.getId().toString());
-        String token = JwtUtil.genToken(map);
+        String token=null;
+        if(searched.getEnd().after(date))
+            token = JwtUtil.genToken(map,searched.getEnd());
+        else {
+            date.setTime(date.getTime()+JwtUtil.EXPIRE_TIME);
+            token = JwtUtil.genToken(map,date);
+        }
         res.put("token",token);
         Msgserver msgserver = msgserverMapper.selectByPrimaryKey(meetingserverMapper.selectByMid(searched.getId()).getSid());
         res.put("msgserver",msgserver);
+        return res;
+    }
+
+    @Override
+    public int closeRoom(Meeting meeting) {
+        if(meeting==null || meeting.getUid()==null || meeting.getId()==null || meeting.getCode()==null) {
+            return ErrorCode.UNABLE_TO_PARSE_SUBMITTED_DATA;
+        }
+        Meeting searched = meetingService.searchMeetingById(meeting);
+        if(searched==null || !searched.getCode().equals(meeting.getCode())|| !searched.getUid().equals(meeting.getUid())) {
+            return ErrorCode.PERMISSION_ERROR;
+        }
+        Date date = new Date(System.currentTimeMillis());
+        if(searched.getStart().after(date))
+            return ErrorCode.MEETING_IS_NOT_START;
+        int res = meetingService.overMeeting(meeting);
         return res;
     }
 }

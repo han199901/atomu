@@ -274,4 +274,22 @@
 
   ~~~
 
+- http://help.hanblog.fun/api/room/close
+
+  ~~~json
+  Method: POST
+  {"id":"会议ID","code":"会议码"}
+  
+  成功返回：
+  {
+  "code": 0,
+  "result": null
+  }
+  失败返回：
+  {
+  "code": 13, 6 权限错误， 10 没有该会议 13 会议已经结束 14 会议尚未开始
+  "result": null
+  }
+  ~~~
+
   

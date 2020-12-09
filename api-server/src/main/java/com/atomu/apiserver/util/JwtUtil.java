@@ -10,7 +10,7 @@ import java.util.*;
 
 public class JwtUtil {
     //一小时过期
-    private static final long EXPIRE_TIME = 60*60*1000;
+    public static final long EXPIRE_TIME = 60*60*1000;
     //TOKEN 私钥
     private static final String TOKEN_SECRET = "405c1e6d-05be-447a-8a81-ca58190185ca";
     public static String genToken(String uid) {
@@ -28,6 +28,18 @@ public class JwtUtil {
     public static String genToken(Map<String, String> map) {
         Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
         Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+        Map<String, Object> header = new HashMap<>();
+        header.put("typ","JWT");
+        header.put("alg","HS256");
+        JWTCreator.Builder token = JWT.create().withHeader(header);
+        for(String key : map.keySet()) {
+            token.withClaim(key,map.get(key));
+        }
+        return  token.withExpiresAt(date)
+                .sign(algorithm);
+    }
+    public static String genToken(Map<String, String> map,Date date) {
+        Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
         Map<String, Object> header = new HashMap<>();
         header.put("typ","JWT");
         header.put("alg","HS256");

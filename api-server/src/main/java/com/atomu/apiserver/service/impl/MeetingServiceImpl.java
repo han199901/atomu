@@ -99,7 +99,7 @@ public class MeetingServiceImpl implements MeetingService {
         else if(searchedMeeting.getRealend()==null) {
             Date date = new Date(System.currentTimeMillis());
             meeting.setRealend(date);
-            meetingMapper.updateByCode(meeting);
+            meetingMapper.updateByPrimaryKeySelective(meeting);
             return 0;
         } else {
             return ErrorCode.MEETING_IS_ENDED;
