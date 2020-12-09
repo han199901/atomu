@@ -32,6 +32,8 @@ public class MeetingController {
             if (result.getId() == -1) {
                 return R.setError(ErrorCode.QUANTITY_EXCEEDS_LIMIT, null);
             }
+            if(result.getId() == -2)
+                return R.setError(ErrorCode.INVALID_TIME,null);
         }
         return R.setOK(result);
     }

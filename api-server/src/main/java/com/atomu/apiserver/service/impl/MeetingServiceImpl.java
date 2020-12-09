@@ -41,8 +41,11 @@ public class MeetingServiceImpl implements MeetingService {
             return res;
         }
         for(int i=0; i<meetingList.size();i++) {
-            if(CommonUtil.IsInterSection(meetingList.get(i).getStart(),meetingList.get(i).getEnd(),meeting.getStart(),meeting.getEnd()))
-                return null;
+            if(CommonUtil.IsInterSection(meetingList.get(i).getStart(),meetingList.get(i).getEnd(),meeting.getStart(),meeting.getEnd())){
+                Meeting res = new Meeting();
+                res.setId(-2);
+                return res;
+            }
         }
         meetingMapper.insertSelective(meeting);
         Meetingserver meetingserver = new Meetingserver();

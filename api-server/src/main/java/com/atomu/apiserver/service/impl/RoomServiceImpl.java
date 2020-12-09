@@ -38,7 +38,7 @@ public class RoomServiceImpl implements RoomService {
             return res;
         }
         Date date = new Date(System.currentTimeMillis());
-        if(date.after(searched.getStart())) {
+        if(date.before(searched.getStart())) {
             res.put("code", ErrorCode.MEETING_IS_NOT_START);
             res.put("errResult",searched);
             return res;
