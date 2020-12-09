@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-07 10:02+0800\n"
+"POT-Creation-Date: 2020-12-10 03:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,11 +40,34 @@ msgstr "创建一个新会议"
 msgid "My meetings"
 msgstr "我的会议"
 
-msgid "label"
+msgid ""
+"If you have a invitation link. Open it in browser, and then Atomu Client "
+"will start and join the meeting automatically.\n"
+"\n"
+"If Atomu Client not start, you can try to enter the meeting code manually."
 msgstr ""
+"如果你有邀请链接。在浏览器中打开它，然后 Atomu Client 将会自动打开链接并加入"
+"到会议。\n"
+"\n"
+"如果 Atomu Client 没有启动，你可以尝试在下面手动输入代码。"
+
+msgid "Join"
+msgstr "加入"
 
 msgid "Join meeting"
 msgstr "加入会议"
+
+msgid "Members"
+msgstr "成员"
+
+msgid "Messages"
+msgstr "消息"
+
+msgid "Start my live"
+msgstr "开始直播"
+
+msgid "More"
+msgstr "更多"
 
 msgid "About"
 msgstr "关于"
@@ -85,6 +108,9 @@ msgstr "会议的日期时间重叠"
 msgid "Meeting is expired"
 msgstr "会议已失效"
 
+msgid "Meeting is not started"
+msgstr "会议未开始"
+
 msgid "Network error, please check your network connection."
 msgstr "网络错误，请检查你的网络连接。"
 
@@ -97,8 +123,18 @@ msgstr "分享链接已复制到剪贴板"
 msgid "Unnamed meeting"
 msgstr "未命名的会议"
 
+msgid "End meeting"
+msgstr "结束会议"
+
+msgid "Exit"
+msgstr "退出"
+
+msgid "Invalid meeting code"
+msgstr "会议代码无效"
+
 msgid "%d %b %Y %H:%M"
 msgstr "%Y年%m月%d日 %H:%M"
 
+#, python-format
 msgid "From %(from)s, to %(to)s"
 msgstr "从 %(from)s，到 %(to)s"
