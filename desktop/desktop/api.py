@@ -15,6 +15,7 @@ __all__ = [
     "api_async",
     "api",
     "set_code",
+    "get_uid",
     "reload_token",
     "reload_token_async"
 ]
@@ -85,8 +86,11 @@ def api_async(endpoint, body, callback):
 def set_code(uid, code):
     global _uid, _code
 
-    _uid = uid
+    _uid = int(uid)
     _code = code
+
+def get_uid():
+    return _uid
 
 def reload_token():
     resp = api("/login/token", {

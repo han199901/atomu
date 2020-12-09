@@ -43,6 +43,10 @@ class MainWindow(Window):
 
         self.window.show_all()
 
+        self.madmin = False
+        self.mid = None
+        self.mcode = None
+
     def on_meeting_delete_clicked(self, button, row, id, code):
         def on_done(r, e):
             try:
@@ -111,6 +115,67 @@ class MainWindow(Window):
     def on_create_meeting_clicked(self, button):
         CreateMeetingDialog(self)
 
+    def menter(self, msgserver, meeting, token):
+        self.mid = meeting["id"]
+        self.mcode = meeting["code"]
+
+        if meeting["uid"] == get_uid():
+            self.madmin = True
+            self.get("mexit").set_label(_("End meeting"))
+        else:
+            self.madmin = False
+            self.get("mexit").set_label(_("Exit"))
+
+        self.get("stack_main").set_visible_child_name("meeting")
+
+    def destroy_meeting(self, mid):
+        def on_done(r, e):
+            try:
+                result = finish(r, e)
+            except CError as e:
+                self.defexphandler(e)
+
+        api_async("/room/close", {
+            "id": mid
+        }, on_done)
+
+    def mexit(self):
+        if self.madmin:
+            self.destroy_meeting(self.mid)
+
+        self.get("stack_main").set_visible_child_name("join")
+
+    def on_mexit_clicked(self, button):
+        self.mexit()
+
+    def on_start_live_clicked(self, button):
+        pass
+
+    def on_meeting_more_clicked(self, button):
+        pass
+
+    def on_join_clicked(self, button):
+        tmp = self.get("mcode").get_text().split(":")
+
+        if len(tmp) != 2:
+            self.err(_("Invalid meeting code"))
+            return
+
+        code = tmp[1]
+        mid = tmp[0]
+
+        def on_done(r, e):
+            try:
+                result = finish(r, e)
+                self.menter(result["msgserver"], result["meeting"], result["token"])
+            except CError as e:
+                self.defexphandler(e)
+
+        api_async("/room/enter", {
+            "id": mid,
+            "code": code
+        }, on_done)
+
     def on_about(self, action, param):
         pass
 
@@ -125,7 +190,7 @@ class MainWindow(Window):
                 config_set("user_auth_uid", None)
                 config_set("user_auth_code", None)
                 self.window.close()
-            except CError:
+            except CError as e:
                 self.defexphandler(e)
 
         api_async("/user/logout", {
