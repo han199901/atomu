@@ -30,8 +30,9 @@ errmap = {
     4: _("Login failed, please check your username and password."),
     6: _("Permision denied"),
     10: _("No such meeting"),
-    12: _("Meeting datetime overlap"),
+    11: _("Meeting datetime overlap"),
     13: _("Meeting is expired"),
+    14: _("Meeting is not started"),
 }
 
 class Window():
