@@ -4,6 +4,7 @@ import asyncio
 import websockets
 import jwt
 import json
+from itertools import islice
 
 from . import config
 from wsproto.signaling import *
@@ -32,7 +33,8 @@ class MyJSONEncoder(json.JSONEncoder):
             return super().default(o)
 
 async def broadcast(mid, signaling, ignore_uid=None, kill=False):
-    for u, member in meetings[mid].items():
+    tmp = meetings[mid].copy()
+    for u, member in tmp.items():
         if ignore_uid and u == ignore_uid:
             continue
         try:
@@ -40,20 +42,22 @@ async def broadcast(mid, signaling, ignore_uid=None, kill=False):
             print(f"> {mid} {u}: {text}")
             await member.socket.send(text)
             if kill:
-                unreg(mid, u)
+                await unreg(mid, u, unreg_only=True)
         except websockets.ConnectionClosed:
-            await unreg(mid, u)
+            await unreg(mid, u, unreg_only=True)
 
-async def unreg(mid, uid):
+async def unreg(mid, uid, unreg_only=False):
     if mid not in meetings or \
             uid not in meetings[mid]:
         return
 
-    await meetings[mid][uid].socket.close()
-    if not meetings_stats[mid].is_ending:
+    member = meetings[mid][uid]
+    del meetings[mid][uid]
+
+    await member.socket.close()
+    if not unreg_only and not meetings_stats[mid].is_ending:
         await broadcast(mid, SignalingMembersNotify([{"a": "remove", "uid": uid}]), ignore_uid=uid)
 
-    del meetings[mid][uid]
     if not meetings[mid]:
         del meetings[mid]
         if mid in meetings_stats:
@@ -100,7 +104,7 @@ async def worker(websocket, path):
         elif signaling.type == "end":
             #FIXME: only admin
             meetings_stats[mid].is_ending = True
-            await broadcast(mid, signaling, ignore_uid=uid)
+            await broadcast(mid, signaling, ignore_uid=uid, kill=True)
             
         else:
             #FIXME: error notify to user

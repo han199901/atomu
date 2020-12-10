@@ -16,7 +16,8 @@ class Application(Gtk.Application):
     def __init__(self, data_dir):
         self.data_dir = data_dir
 
-        Gtk.Application.__init__(self, application_id="com.atomu.client.desktop")
+        import random
+        Gtk.Application.__init__(self, application_id="com.atomu.client.desktop._" + str(random.randint(0, 10000)))
         self.res = "/com/atomu/client/desktop"
 
         config_load()
