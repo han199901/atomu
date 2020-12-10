@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>registerAjaxDemo</title>
+    <link rel="stylesheet" type="text/css" href="css/registerAjaxDemo.css">
+</head>
+<body>
+    <div class="register">
+        <p class="title" id="title">
+            <span class="current">注 册</span>
+        </p>
+        <div class="form">
+            <div>
+                <input type="text" name="user" id="user" placeholder="请输入注册用户名" autocomplete="off">
+                <i id="user_icon"></i>
+                <p class="info" id="user_info"></p>
+            </div>
+            <div>
+                <input type="password" name="pwd" id="pwd" placeholder="请设置密码">
+                <i id="pwd_icon"></i> 
+                <p class="info" id="pwd_info"></p>
+            </div>
+            <p class="button">
+                <a href="javascript:void(0)" id="sigup-btn" class="btn show">注 册</a>
+                <a href="javascript:void(0)" id="login-btn" class="btn">登 录</a>
+            </p>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript">
+        var user = document.getElementById("user"),
+            pwd = document.getElementById("pwd"),
+            sigup = document.getElementById("sigup-btn"),
+            login = document.getElementById("login-btn"),
+            titles = document.getElementById("title").querySelectorAll("span");
+            userInfo = document.getElementById("user_info"),
+            userIcon = document.getElementById("user_icon"),
+            pwdInfo = document.getElementById("pwd_info"),
+            pwdIcon = document.getElementById("pwd_icon"),
+            userReg = /./,
+            pwdReg = /^[\w\W]{6,18}$/,
+            isRepeat = false;     //记录用户名是否被占用
+        
+        // 检测用户
+        function checkUser(){
+            var userVal = user.value;
+            // 验证用户名是否有效
+            if(!userReg.test(userVal)){
+                userInfo.innerHTML = "用户名!";
+                userIcon.className = "no";
+            }else{
+                userInfo.innerHTML = "";
+                userIcon.className = "";
+                userIcon.className = "ok";
+				isRepeat = false;
+            }
+        }
+
+        // 检测密码
+        function checkPwd(){
+            var pwdVal = pwd.value;
+            if(!pwdReg.test(pwdVal)){
+                pwdInfo.innerHTML = "请输入6到18位的数字、字母和符号.";
+                pwdIcon.className = "no";
+            }else{
+                pwdInfo.innerHTML = "";
+                pwdIcon.className = "ok";
+            }
+        }
+
+        // 注册
+        function register(){
+            // 如果用户名有效且没有被占用,同时密码合法,方可注册
+            var user_val = user.value,
+                pwd_val = pwd.value;
+            if(userReg.test(user_val) && pwdReg.test(pwd_val) && !isRepeat){
+                // 发起请求,实现注册
+                $.ajax({
+                    url:"/api/login/register",
+                    method:"post",
+                    contentType: "application/json;charset=utf-8",
+                    dataType:"json",
+                    data:JSON.stringify({name:user_val,password:pwd_val}),
+                    success:function(data){
+                        if(data.code == 0)
+                            alert("注册成功,请登录!");
+                        else if(data.code == 2)
+                            alert("该用户已经被注册");
+                        else
+                            alert("大概是服务器崩了吧TAT");
+                    },
+                    error:function(){
+                        pwdInfo.innerHTML = "注册失败,请重试!";
+                    }
+                })
+            }
+        }
+
+        // 显示登录
+        function showLogin(){
+            // 载入登录界面,登录高亮显示
+            titles[0].className = "current";
+            titles[1].className = "";
+            login.className = "show";
+            sigup.className = "";
+        }
+
+        // 显示注册
+        function showSigup(){
+            // 载入注册界面,登录高亮显示
+            titles[0].className = "";
+            titles[1].className = "current";
+            login.className = "";
+            sigup.className = "show";
+        }
+
+        // 绑定事件,检测用户的有效性及是否注册过   
+        user.addEventListener("blur",checkUser,false);
+
+        // 绑定事件,检测密码的有效性
+        pwd.addEventListener("blur",checkPwd,false);
+
+        // 注册
+        sigup.addEventListener("click",register,false);
+        // 注册高亮
+        titles[1].addEventListener("click",showSigup,false);
+    </script>
+</body>
+</html>
