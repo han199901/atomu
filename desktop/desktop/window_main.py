@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from gi.repository import Gtk, Gio, GLib, Gdk
+from gi.repository import Soup
 from gettext import gettext as _
 
 import sys
+import json
 from iso8601 import parse_date
 from datetime import datetime, timezone
 
@@ -49,6 +51,8 @@ class MainWindow(Window):
         self.mid = None
         self.mcode = None
         self.vlc = None
+        self.session = None
+        self.wsconn = None
 
     def on_meeting_delete_clicked(self, button, row, id, code):
         def on_done(r, e):
@@ -131,6 +135,62 @@ class MainWindow(Window):
     def on_create_meeting_clicked(self, button):
         CreateMeetingDialog(self)
 
+    def ws_send(self, data):
+        print(f"ws> {data}")
+        self.wsconn.send_text(json.dumps(data))
+
+    def on_ws_message(self, connection, msg_type, message):
+        text = message.get_data().decode()
+        print(f"ws< {text}")
+        obj = json.loads(text)
+        if obj['type'] == "members_list_response":
+            lb = self.get("members")
+            for i in lb.get_children():
+                lb.remove(i)
+
+            for id, member in obj['members'].items():
+                lr = MemberListRow(id, member['name'])
+                lb.add(lr)
+        elif obj['type'] == "members_notify":
+            lb = self.get("members")
+
+            for i in obj['members_changed']:
+                if i["a"] == "add":
+                    lr = MemberListRow(i["m"]["uid"], i["m"]["name"])
+                    lb.add(lr)
+                elif i["a"] == "remove":
+                    for row in lb.get_children():
+                        if row.get_child().id == i["uid"]:
+                            lb.remove(row)
+        elif obj['type'] == "end":
+            self.mexit()
+        else:
+            print(f"unknown ws msg type {obj['type']}")
+
+    def on_ws_closed(self, connection):
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
+    def on_ws_connected(self, session, result, meeting, token):
+        try:
+            self.wsconn = session.websocket_connect_finish(result)
+            self.wsconn.connect('message', self.on_ws_message)
+            self.wsconn.connect('closed', self.on_ws_closed)
+            self.wsconn.set_keepalive_interval(5)
+
+            self.ws_send({
+                "type": "handshake",
+                "token": token
+            })
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            print(e)
+            self.session = None
+            self.err(_("Can not enter meeting room."))
+        finally:
+            pass
+            #self.get("spinner").stop()
+
     def menter(self, msgserver, meeting, token):
         if not self.vlc:
             self.vlc = VLCWidget(self.get("vlc"))
@@ -138,6 +198,9 @@ class MainWindow(Window):
 
         self.mid = meeting["id"]
         self.mcode = meeting["code"]
+        self.session = Soup.Session()
+        msg = Soup.Message.new("GET", msgserver["ip"])
+        self.session.websocket_connect_async(msg, None, None, None, self.on_ws_connected, meeting, token)
 
         if meeting["uid"] == get_uid():
             self.madmin = True
@@ -174,6 +237,10 @@ class MainWindow(Window):
         }, on_done)
 
     def mexit(self):
+        if self.wsconn:
+            self.wsconn.close(0)
+            self.wsconn = None
+
         if self.vlc:
             self.vlc.stop()
 
