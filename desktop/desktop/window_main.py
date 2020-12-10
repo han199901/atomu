@@ -15,6 +15,8 @@ from .misc import dark_mode_switch, format_date_ml, sharelink
 from .config import *
 from .dialog_create_meeting import CreateMeetingDialog
 from .widget_meeting_list_row import MeetingListRow
+from .widget_member_list_row import MemberListRow
+from .vlc import VLCWidget
 
 class MainWindow(Window):
     def __init__(self, app):
@@ -46,6 +48,7 @@ class MainWindow(Window):
         self.madmin = False
         self.mid = None
         self.mcode = None
+        self.vlc = None
 
     def on_meeting_delete_clicked(self, button, row, id, code):
         def on_done(r, e):
@@ -81,6 +84,17 @@ class MainWindow(Window):
 
         GLib.timeout_add(5000, infobar_timeout, infobar)
 
+    def on_listbox_meetings_row_activated(self, lb, row):
+        lr = row.get_child()
+        id = lr.x_id
+        code = lr.x_code
+
+        lb.set_sensitive(False)
+        def cb():
+            lb.set_sensitive(True)
+
+        self.mjoin(id, code, cb)
+
     def list_all_my_meetings(self):
         lb = self.get("listbox_meetings")
         for i in lb.get_children():
@@ -102,6 +116,8 @@ class MainWindow(Window):
                         lr.description.set_text(format_date_ml(btime, etime))
                         lr.delete.connect("clicked", self.on_meeting_delete_clicked, lr, i["id"], i["code"])
                         lr.share.connect("clicked", self.on_meeting_share_clicked, i["id"], i["code"])
+                        lr.x_id = i["id"]
+                        lr.x_code = i["code"]
                         lb.add(lr)
             except CNetworkError as e:
                 print("network error, will re-try soon ...")
@@ -116,6 +132,10 @@ class MainWindow(Window):
         CreateMeetingDialog(self)
 
     def menter(self, msgserver, meeting, token):
+        if not self.vlc:
+            self.vlc = VLCWidget(self.get("vlc"))
+            #self.vlc.set_mrl("/media/th/disk2/th/bitcoin.mp4")
+
         self.mid = meeting["id"]
         self.mcode = meeting["code"]
 
@@ -127,6 +147,20 @@ class MainWindow(Window):
             self.get("mexit").set_label(_("Exit"))
 
         self.get("stack_main").set_visible_child_name("meeting")
+
+    def mjoin(self, mid, code, callback):
+        def on_done(r, e):
+            try:
+                callback()
+                result = finish(r, e)
+                self.menter(result["msgserver"], result["meeting"], result["token"])
+            except CError as e:
+                self.defexphandler(e)
+
+        api_async("/room/enter", {
+            "id": mid,
+            "code": code
+        }, on_done)
 
     def destroy_meeting(self, mid):
         def on_done(r, e):
@@ -140,12 +174,18 @@ class MainWindow(Window):
         }, on_done)
 
     def mexit(self):
-        if self.madmin:
-            self.destroy_meeting(self.mid)
+        if self.vlc:
+            self.vlc.stop()
 
         self.get("stack_main").set_visible_child_name("join")
 
     def on_mexit_clicked(self, button):
+        if self.madmin:
+            self.destroy_meeting(self.mid)
+            self.ws_send({
+                "type": "end"
+            })
+
         self.mexit()
 
     def on_start_live_clicked(self, button):
@@ -164,17 +204,11 @@ class MainWindow(Window):
         code = tmp[1]
         mid = tmp[0]
 
-        def on_done(r, e):
-            try:
-                result = finish(r, e)
-                self.menter(result["msgserver"], result["meeting"], result["token"])
-            except CError as e:
-                self.defexphandler(e)
+        button.set_sensitive(False)
+        def cb():
+            button.set_sensitive(True)
 
-        api_async("/room/enter", {
-            "id": mid,
-            "code": code
-        }, on_done)
+        self.mjoin(mid, code, cb)
 
     def on_about(self, action, param):
         pass
