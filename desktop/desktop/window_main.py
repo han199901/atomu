@@ -136,8 +136,9 @@ class MainWindow(Window):
         CreateMeetingDialog(self)
 
     def ws_send(self, data):
-        print(f"ws> {data}")
-        self.wsconn.send_text(json.dumps(data))
+        if self.wsconn:
+            print(f"ws> {data}")
+            self.wsconn.send_text(json.dumps(data))
 
     def on_ws_message(self, connection, msg_type, message):
         text = message.get_data().decode()
@@ -168,7 +169,8 @@ class MainWindow(Window):
             print(f"unknown ws msg type {obj['type']}")
 
     def on_ws_closed(self, connection):
-        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        print("on_ws_closed")
+        self.mexit()
 
     def on_ws_connected(self, session, result, meeting, token):
         try:
@@ -246,12 +248,25 @@ class MainWindow(Window):
 
         self.get("stack_main").set_visible_child_name("join")
 
+    def on_mexit_only_clicked(self, button):
+        self.mexit()
+
+    def on_share_clicked(self, button):
+        self.on_meeting_share_clicked(button, self.mid, self.mcode)
+
+    def on_fullscreen_clicked(self, button):
+        if self.window.get_window().get_state() & Gdk.WindowState.FULLSCREEN:
+            self.window.unfullscreen()
+        else:
+            self.window.fullscreen()
+
     def on_mexit_clicked(self, button):
         if self.madmin:
             self.destroy_meeting(self.mid)
             self.ws_send({
                 "type": "end"
             })
+            self.list_all_my_meetings()
 
         self.mexit()
 
