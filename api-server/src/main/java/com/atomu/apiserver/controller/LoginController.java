@@ -40,7 +40,7 @@ public class LoginController {
             return R.setOK(result);
         }
     }
-    @PutMapping("/register")
+    @PostMapping("/register")
     public R register(@RequestBody User user) {
         int code = userService.register(user);
         if(code==0)
