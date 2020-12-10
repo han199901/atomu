@@ -4,6 +4,7 @@ import com.atomu.apiserver.entity.Meeting;
 import com.atomu.apiserver.entity.Msgserver;
 import com.atomu.apiserver.mapper.MeetingserverMapper;
 import com.atomu.apiserver.mapper.MsgserverMapper;
+import com.atomu.apiserver.mapper.UserMapper;
 import com.atomu.apiserver.service.MeetingService;
 import com.atomu.apiserver.service.RoomService;
 import com.atomu.apiserver.util.ErrorCode;
@@ -24,6 +25,8 @@ public class RoomServiceImpl implements RoomService {
     MeetingserverMapper meetingserverMapper;
     @Autowired
     MsgserverMapper msgserverMapper;
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public Map<String, Object> enterRoom(Meeting meeting) {
@@ -49,11 +52,13 @@ public class RoomServiceImpl implements RoomService {
             return res;
         }
         Boolean isAdmin = meeting.getUid().equals(searched.getUid())?true:false;
+        String username = userMapper.selectByPrimaryKey(meeting.getUid()).getName();
         res.put("meeting",searched);
         Map<String,String> map = new HashMap<>();
         map.put("uid",meeting.getUid().toString());
         map.put("mid",searched.getId().toString());
         map.put("isAdmin",isAdmin.toString());
+        map.put("name",username);
         String token=null;
         if(searched.getEnd().after(date))
             token = JwtUtil.genToken(map,searched.getEnd());
