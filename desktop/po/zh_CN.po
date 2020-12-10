@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-10 03:12+0800\n"
+"POT-Creation-Date: 2020-12-10 21:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,15 @@ msgid ""
 "Don't have an account yet?\n"
 "<a href=\"www.google.com\">Register Now</a>"
 msgstr ""
+
+msgid "Exit"
+msgstr "退出"
+
+msgid "Share meeting"
+msgstr "分享会议"
+
+msgid "Fullscreen"
+msgstr "全屏"
 
 msgid "Create a new meeting"
 msgstr "创建一个新会议"
@@ -123,11 +132,11 @@ msgstr "分享链接已复制到剪贴板"
 msgid "Unnamed meeting"
 msgstr "未命名的会议"
 
+msgid "Can not enter meeting room."
+msgstr "无法进入会议室。"
+
 msgid "End meeting"
 msgstr "结束会议"
-
-msgid "Exit"
-msgstr "退出"
 
 msgid "Invalid meeting code"
 msgstr "会议代码无效"
