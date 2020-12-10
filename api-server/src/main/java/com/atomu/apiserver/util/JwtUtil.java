@@ -5,14 +5,34 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.util.*;
 
+@Component
 public class JwtUtil {
     //一小时过期
-    public static final long EXPIRE_TIME = 60*60*1000;
+    public static long EXPIRE_TIME;
     //TOKEN 私钥
-    private static final String TOKEN_SECRET = "405c1e6d-05be-447a-8a81-ca58190185ca";
+    private static String TOKEN_SECRET;
+    //MSG-SERVER 私钥
+    private static String MSG_TOKEN_SECRET;
+
+    @Value("${token.expire-time}")
+    public void setExpireTime(long expireTime) {
+        EXPIRE_TIME = expireTime;
+    }
+    @Value("${token.api-server.secret}")
+    public void setTokenSecret(String secret) {
+        TOKEN_SECRET = secret;
+    }
+    @Value("${token.msg-server.secret}")
+    public void setMsgTokenSecret(String secret) {
+        MSG_TOKEN_SECRET = secret;
+    }
+
     public static String genToken(String uid) {
         Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
         Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
@@ -38,8 +58,15 @@ public class JwtUtil {
         return  token.withExpiresAt(date)
                 .sign(algorithm);
     }
+
+    /**
+     *  for msg server
+     * @param map
+     * @param date
+     * @return
+     */
     public static String genToken(Map<String, String> map,Date date) {
-        Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
+        Algorithm algorithm = Algorithm.HMAC256(MSG_TOKEN_SECRET);
         Map<String, Object> header = new HashMap<>();
         header.put("typ","JWT");
         header.put("alg","HS256");

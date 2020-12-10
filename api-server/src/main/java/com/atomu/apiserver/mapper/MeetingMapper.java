@@ -25,6 +25,6 @@ public interface MeetingMapper {
     Meeting selectByCode(Meeting record);
 
     List<Meeting> selectByUid(Meeting record);
-
+    List<Meeting> selectByUidAndNotEnd(Meeting record);
     int updateByCode(Meeting record);
 }

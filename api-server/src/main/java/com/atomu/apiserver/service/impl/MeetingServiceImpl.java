@@ -32,6 +32,9 @@ public class MeetingServiceImpl implements MeetingService {
         if(meeting==null || meeting.getStart() == null || meeting.getEnd() == null)
             return null;
         meeting.setCode(CommonUtil.genUUIDSimple());
+        Date date = new Date(System.currentTimeMillis());
+        if(date.after(meeting.getEnd()))
+            return null;
         if(meeting.getStart().after(meeting.getEnd()))
             return null;
         List<Meeting> meetingList = this.listMeeting(meeting);
@@ -41,7 +44,15 @@ public class MeetingServiceImpl implements MeetingService {
             return res;
         }
         for(int i=0; i<meetingList.size();i++) {
-            if(CommonUtil.IsInterSection(meetingList.get(i).getStart(),meetingList.get(i).getEnd(),meeting.getStart(),meeting.getEnd())){
+            Date start1,end1,start2,end2;
+            start1 = meetingList.get(i).getStart();
+            start2 = meeting.getStart();
+            if(meetingList.get(i).getRealend()==null)
+                end1 = meetingList.get(i).getEnd();
+            else
+                end1 = meetingList.get(i).getRealend();
+            end2 = meeting.getEnd();
+            if(CommonUtil.IsInterSection(start1,end1,start2,end2)){
                 Meeting res = new Meeting();
                 res.setId(-2);
                 return res;
@@ -86,9 +97,9 @@ public class MeetingServiceImpl implements MeetingService {
             return null;
         Meeting temp = new Meeting();
         temp.setUid(meeting.getUid());
-        Date date = new Date(System.currentTimeMillis());
-        temp.setEnd(date);
-        List<Meeting> meetingArrayList = meetingMapper.selectByUid(temp);
+//        Date date = new Date(System.currentTimeMillis());
+//        temp.setEnd(date);
+        List<Meeting> meetingArrayList = meetingMapper.selectByUidAndNotEnd(temp);
         return meetingArrayList;
     }
 

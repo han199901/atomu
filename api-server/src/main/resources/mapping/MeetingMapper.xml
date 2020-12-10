@@ -26,7 +26,12 @@
     from meeting
     where uid = #{uid,jdbcType=INTEGER} AND end > #{end,jdbcType=TIMESTAMP} ORDER BY `start`
   </select>
-
+  <select id="selectByUidAndNotEnd" parameterType="com.atomu.apiserver.entity.Meeting" resultType="com.atomu.apiserver.entity.Meeting">
+    select
+    <include refid="Base_Column_List" />
+    from meeting
+    where uid = #{uid,jdbcType=INTEGER} and realEnd is null ORDER BY `start`
+  </select>
 
   <select id="selectByCode" parameterType="com.atomu.apiserver.entity.Meeting" resultMap="BaseResultMap">
     select

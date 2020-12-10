@@ -48,11 +48,12 @@ public class RoomServiceImpl implements RoomService {
             res.put("errResult",searched);
             return res;
         }
-
+        Boolean isAdmin = meeting.getUid().equals(searched.getUid())?true:false;
         res.put("meeting",searched);
         Map<String,String> map = new HashMap<>();
         map.put("uid",meeting.getUid().toString());
         map.put("mid",searched.getId().toString());
+        map.put("isAdmin",isAdmin.toString());
         String token=null;
         if(searched.getEnd().after(date))
             token = JwtUtil.genToken(map,searched.getEnd());
@@ -68,11 +69,11 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public int closeRoom(Meeting meeting) {
-        if(meeting==null || meeting.getUid()==null || meeting.getId()==null || meeting.getCode()==null) {
+        if(meeting==null || meeting.getUid()==null || meeting.getId()==null) {
             return ErrorCode.UNABLE_TO_PARSE_SUBMITTED_DATA;
         }
         Meeting searched = meetingService.searchMeetingById(meeting);
-        if(searched==null || !searched.getCode().equals(meeting.getCode())|| !searched.getUid().equals(meeting.getUid())) {
+        if(searched==null || !searched.getUid().equals(meeting.getUid())) {
             return ErrorCode.PERMISSION_ERROR;
         }
         Date date = new Date(System.currentTimeMillis());
