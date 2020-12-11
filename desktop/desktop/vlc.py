@@ -11,7 +11,7 @@ import vlc
 
 class VLCWidget:
 
-    def get_window_pointer(window):
+    def get_window_pointer(self, window):
         ctypes.pythonapi.PyCapsule_GetPointer.restype = ctypes.c_void_p
         ctypes.pythonapi.PyCapsule_GetPointer.argtypes = [ctypes.py_object]
         return ctypes.pythonapi.PyCapsule_GetPointer(window.__gpointer__, None)
@@ -27,7 +27,9 @@ class VLCWidget:
 
         if sys.platform == 'win32':
             gdkdll = ctypes.CDLL('libgdk-3-0.dll')
-            handle = gdkdll.gdk_win32_window_get_handle(get_window_pointer(self.get_window()))
+            gdkdll.gdk_win32_window_get_handle.restype = ctypes.c_void_p
+            gdkdll.gdk_win32_window_get_handle.argtypes = [ctypes.c_void_p]
+            handle = gdkdll.gdk_win32_window_get_handle(self.get_window_pointer(draw_area.get_window()))
             self.player.set_hwnd(handle)
         elif sys.platform == 'darwin':
             gdkdll = ctypes.CDLL('libgdk-3.0.dylib')
