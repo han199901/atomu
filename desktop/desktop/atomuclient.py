@@ -3,6 +3,7 @@
 
 import gi
 gi.require_version("Gtk", "3.0")
+gi.require_version('Soup', '2.4')
 from gi.repository import Gtk, Gio, GLib, Gdk
 import locale
 import gettext
