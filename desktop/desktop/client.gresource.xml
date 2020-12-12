@@ -7,5 +7,8 @@
     <file>ui/create_meeting.ui</file>
     <file>ui/widget_meeting_list_row.ui</file>
     <file>ui/widget_member_list_row.ui</file>
+    <file>ui/widget_message_bubble.ui</file>
+    <file>main.css</file>
+    <file>main-dark.css</file>
   </gresource>
 </gresources>

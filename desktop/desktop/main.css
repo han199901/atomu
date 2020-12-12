@@ -1,0 +1,7 @@
+@define-color bubble_bg_color #eee;
+
+.bubble {
+	background-color: @bubble_bg_color;
+	padding: 8px 6px;
+	border-radius: 12px;
+}
