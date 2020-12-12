@@ -18,6 +18,7 @@ from .config import *
 from .dialog_create_meeting import CreateMeetingDialog
 from .widget_meeting_list_row import MeetingListRow
 from .widget_member_list_row import MemberListRow
+from .widget_message_bubble import MessageBubbleRow
 from .vlc import VLCWidget
 
 class MainWindow(Window):
@@ -138,6 +139,7 @@ class MainWindow(Window):
     def ws_send(self, data):
         if self.wsconn:
             print(f"ws> {data}")
+            data['version'] = 1
             self.wsconn.send_text(json.dumps(data))
 
     def on_ws_message(self, connection, msg_type, message):
@@ -165,8 +167,38 @@ class MainWindow(Window):
                             lb.remove(row)
         elif obj['type'] == "end":
             self.mexit()
+        elif obj['type'] == "broadcast":
+            msg = obj['msg']
+            if msg['op'] == "text":
+                self.add_msg_bubble(obj['from_user']['id'], obj['from_user']['name'], msg['text'])
+            else:
+                print(f"unknown msg op {msg['op']}")
         else:
             print(f"unknown ws msg type {obj['type']}")
+
+    def add_msg_bubble(self, uid, name, text):
+        lb = self.get("messages")
+        lr = MessageBubbleRow(uid)
+        if name != "":
+            name = name + ":\n"
+        else:
+            lr.reverse()
+        lr.text.set_text(name + text)
+        lb.add(lr)
+        lr.get_parent().set_activatable(False)
+
+    def on_send_message_clicked(self, button):
+        entry = self.get("send_message")
+        text = entry.get_text()
+        self.ws_send({
+            "type": "broadcast",
+            "msg": {
+                "op": "text",
+                "text": text
+            }
+        })
+        self.add_msg_bubble(get_uid(), "", text)
+        entry.set_text("")
 
     def on_ws_closed(self, connection):
         print("on_ws_closed")
@@ -189,6 +221,7 @@ class MainWindow(Window):
             print(e)
             self.session = None
             self.err(_("Can not enter meeting room."))
+            self.mexit()
         finally:
             pass
             #self.get("spinner").stop()
@@ -197,6 +230,14 @@ class MainWindow(Window):
         if not self.vlc:
             self.vlc = VLCWidget(self.get("vlc"))
             #self.vlc.set_mrl("/media/th/disk2/th/bitcoin.mp4")
+
+        tmp = self.get("messages")
+        for i in tmp:
+            tmp.remove(i)
+
+        tmp = self.get("members")
+        for i in tmp:
+            tmp.remove(i)
 
         self.mid = meeting["id"]
         self.mcode = meeting["code"]
