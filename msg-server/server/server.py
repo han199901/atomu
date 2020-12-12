@@ -7,7 +7,7 @@ import json
 from itertools import islice
 
 from . import config
-from wsproto.signaling import *
+from .signaling import *
 
 meetings = dict()
 meetings_stats = dict()
@@ -99,8 +99,8 @@ async def worker(websocket, path):
 
         print(f"< {signaling}")
         if signaling.type == "broadcast":
-            signaling.from_user = uid
-            await broadcast(mid, signaling)
+            signaling.from_user = { "id": uid, "name": name }
+            await broadcast(mid, signaling, ignore_uid=uid)
         elif signaling.type == "end":
             #FIXME: only admin
             meetings_stats[mid].is_ending = True
