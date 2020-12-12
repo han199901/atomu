@@ -24,6 +24,11 @@ def init():
         print(libintl.bindtextdomain("atomudesktop".encode(), f"{data_dir}/mo".encode()))
         print(libintl.bind_textdomain_codeset("atomudesktop".encode(), "UTF-8".encode()))
         print(libintl.textdomain("atomudesktop".encode()))
+
+        vlc_path = os.path.join(os.path.dirname(__file__), "vlc")
+        os.environ['PYTHON_VLC_MODULE_PATH'] = vlc_path
+        os.environ['PYTHON_VLC_LIB_PATH'] = os.path.join(vlc_path, "libvlc.dll")
+        os.add_dll_directory(vlc_path)
     else:
         locale.bindtextdomain("atomudesktop", f"{data_dir}/mo")
         locale.textdomain("atomudesktop")
