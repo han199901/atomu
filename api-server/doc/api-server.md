@@ -247,15 +247,73 @@
               "ip6": "255.255.255.255"
           },
           "meeting": {
-              "id": 47,
+              "id": 2,
               "name": null,
               "uid": 1,
-              "code": "c3bf804fcacb4cbf98395855245d73a5",
-              "start": "2019-12-06T15:28:52.000+00:00",
-              "end": "2019-12-06T15:58:52.000+00:00",
+              "code": "adf24c6a4810430698b79dff871e3192",
+              "start": "2020-12-13T02:50:52.000+00:00",
+              "end": "2020-12-13T04:50:52.000+00:00",
               "realend": null
           },
-          "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxIiwibWlkIjoiNDciLCJleHAiOjE2MDc0NDA2OTd9.QY2_BpZrhMFgSoo1lAfjuhN-PLwD7lWTX6W0OBnwQ_w"
+          "live": {
+              "download_addr": "rtmp://127.0.0.1/live/5531bca6d4bd47a8866fdeb62b8a8fd7",
+              "user": {
+                  "id": 2,
+                  "name": "admin3"
+              }
+          },
+          "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIyIiwibmFtZSI6ImFkbWluMyIsIm1pZCI6IjIiLCJpc0FkbWluIjoiZmFsc2UiLCJleHAiOjE2MDc4MzUwNTJ9.lHjlzCwuwsRUvJy_Gkl-Ko2rGc6Qen_zK2_t93oiSgs"
+      }
+  }
+  
+  失败返回：
+  {
+    "code": 14, //10 无改会议 13 会未开始 14 会议已结束
+    "result": {
+        "id": 47,
+        "name": null,
+        "uid": 1,
+        "code": "c3bf804fcacb4cbf98395855245d73a5",
+        "start": "2019-12-06T15:28:52.000+00:00",
+        "end": "2019-12-06T15:58:52.000+00:00",
+        "realend": null
+    }
+  }
+  
+  ~~~
+
+- http://help.hanblog.fun/api/room/close
+
+  ~~~json
+  Method: POST
+  {"id":"会议ID"}
+  
+  成功返回：
+  {
+  "code": 0,
+  "result": null
+  }
+  失败返回：
+  {
+  "code": 13, 6 权限错误， 10 没有该会议 13 会议已经结束 14 会议尚未开始
+  "result": null
+  }
+  ~~~
+
+### /api/live
+
+- http://help.hanblog.fun/api/live/start
+
+  ~~~json
+  Method: POST
+  {"id":"会议ID","code":"会议码"}
+  
+  成功返回：
+  {
+      "code": 0,
+      "result": {
+          "upload_addr": "rtmp://127.0.01/live/5531bca6d4bd47a8866fdeb62b8a8fd7/8f439fe1747b4bc1b2ee3222962e710e",
+          "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIyIiwibWlkIjoiMiIsImV4cCI6MTYwNzgzMDAzM30.X6nkHKkjzFLT50N7ljwYpPhi3AhBPRaMAia2AEtnHqE"
       }
   }
   失败返回：
@@ -270,26 +328,7 @@
         "end": "2019-12-06T15:58:52.000+00:00",
         "realend": null
     }
-}
-
-  ~~~
-
-- http://help.hanblog.fun/api/room/close
-
-  ~~~json
-  Method: POST
-  {"id":"会议ID","code":"会议码"}
-  
-  成功返回：
-  {
-  "code": 0,
-  "result": null
-  }
-  失败返回：
-  {
-  "code": 13, 6 权限错误， 10 没有该会议 13 会议已经结束 14 会议尚未开始
-  "result": null
   }
   ~~~
 
-  
+
