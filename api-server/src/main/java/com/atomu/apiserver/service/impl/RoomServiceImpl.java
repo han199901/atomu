@@ -1,10 +1,7 @@
 package com.atomu.apiserver.service.impl;
 
-import com.atomu.apiserver.entity.Meeting;
-import com.atomu.apiserver.entity.Msgserver;
-import com.atomu.apiserver.mapper.MeetingserverMapper;
-import com.atomu.apiserver.mapper.MsgserverMapper;
-import com.atomu.apiserver.mapper.UserMapper;
+import com.atomu.apiserver.entity.*;
+import com.atomu.apiserver.mapper.*;
 import com.atomu.apiserver.service.MeetingService;
 import com.atomu.apiserver.service.RoomService;
 import com.atomu.apiserver.util.ErrorCode;
@@ -20,7 +17,10 @@ import java.util.Map;
 public class RoomServiceImpl implements RoomService {
     @Autowired
     MeetingService meetingService;
-
+    @Autowired
+    LiveMapper liveMapper;
+    @Autowired
+    LiveserverMapper liveserverMapper;
     @Autowired
     MeetingserverMapper meetingserverMapper;
     @Autowired
@@ -69,6 +69,23 @@ public class RoomServiceImpl implements RoomService {
         res.put("token",token);
         Msgserver msgserver = msgserverMapper.selectByPrimaryKey(meetingserverMapper.selectByMid(searched.getId()).getSid());
         res.put("msgserver",msgserver);
+        Live live = liveMapper.selectByPrimaryKey(meeting.getId());
+        if(live != null) {
+            Liveserver liveserver = liveserverMapper.selectByPrimaryKey(live.getSid());
+
+            User user = userMapper.selectByPrimaryKey(live.getUid());
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("user_name",user.getName());
+            map1.put("user_id",user.getId());
+
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("rtmp://").append(liveserver.getDownload())
+                    .append("/live").append("/").append(live.getUuid());
+            String download = buffer.toString();
+            map1.put("download_addr",download);
+
+            res.put("live",map1);
+        }
         return res;
     }
 
