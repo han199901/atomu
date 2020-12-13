@@ -15,6 +15,8 @@ public interface ErrorCode {
     int MEETING_IS_ENDED = 13;
     int MEETING_IS_NOT_START = 14;
 
+    int NO_LIVE = 15;
+
     int UNABLE_TO_PARSE_SUBMITTED_DATA=1000;
 
 }

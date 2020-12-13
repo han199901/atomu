@@ -1,5 +1,7 @@
 package com.atomu.apiserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class User {
     @Override
     public String toString() {
@@ -14,9 +16,9 @@ public class User {
     private Integer id;
 
     private String name;
-
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String code;
 
     public Integer getId() {

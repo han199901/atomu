@@ -330,5 +330,25 @@
     }
   }
   ~~~
+  
+- http://help.hanblog.fun/api/live/end
 
+  ~~~json
+  Method: POST
+  {"mid":"会议ID"}
+  
+  成功返回：
+  {
+      "code": 0,
+      "result": null
+  }
+  失败返回：
+  {
+    "code": 15, //15 没有该直播
+    "result": {
+    }
+  }
+  ~~~
+
+  
 

@@ -36,7 +36,6 @@ public class LiveServiceImpl implements LiveService {
     public Map<String, Object> startLive(Meeting meeting) {
         Map<String,Object> res = new HashMap<>();
         if(meeting==null || meeting.getUid()==null || meeting.getId()==null || meeting.getCode()==null) {
-            System.out.println(meeting.toString());
             res.put("code", ErrorCode.UNABLE_TO_PARSE_SUBMITTED_DATA);
             return res;
         }
@@ -77,7 +76,7 @@ public class LiveServiceImpl implements LiveService {
         }
         else {
             live.setUid(meeting.getUid());
-            liveMapper.updateByPrimaryKey(live);
+            int line = liveMapper.updateByPrimaryKey(live);
         }
         Liveserver liveserver = liveserverMapper.selectByPrimaryKey(live.getSid());
         StringBuffer buffer = new StringBuffer();
@@ -89,6 +88,26 @@ public class LiveServiceImpl implements LiveService {
                 .append("/")
                 .append(live.getUpsecret());
         res.put("upload_addr",buffer.toString());
+        return res;
+    }
+
+    @Override
+    public Map<String, Object> endLive(Live live) {
+        Map<String,Object> res = new HashMap<>();
+        if(live==null || live.getMid() == null || live.getUid()==null){
+            res.put("code", ErrorCode.UNABLE_TO_PARSE_SUBMITTED_DATA);
+            return res;
+        }
+        Live searchedLive = liveMapper.selectByPrimaryKey(live.getMid());
+        if(searchedLive == null) {
+            res.put("code",ErrorCode.NO_LIVE);
+            return res;
+        }
+        if(live.getUid() != searchedLive.getUid()){
+            res.put("code",ErrorCode.NO_LIVE);
+            return res;
+        }
+        liveMapper.deleteByPrimaryKey(live.getMid());
         return res;
     }
 }

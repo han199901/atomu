@@ -1,5 +1,6 @@
 package com.atomu.apiserver.controller;
 
+import com.atomu.apiserver.entity.Live;
 import com.atomu.apiserver.entity.Meeting;
 import com.atomu.apiserver.service.LiveService;
 import com.atomu.apiserver.util.R;
@@ -24,5 +25,15 @@ public class LiveController {
         if (res.get("code")!=null)
             return R.setError((int)res.get("code"),res.get("errResult"));
         return R.setOK(res);
+    }
+
+    @PostMapping("/end")
+    public R end(@RequestBody Live live, @RequestAttribute("Uid") String Uid) {
+        int uid = Integer.parseInt(Uid);
+        live.setUid(uid);
+        Map<String, Object> res = liveService.endLive(live);
+        if (res.get("code")!=null)
+            return R.setError((int)res.get("code"),res.get("errResult"));
+        return R.setOK();
     }
 }

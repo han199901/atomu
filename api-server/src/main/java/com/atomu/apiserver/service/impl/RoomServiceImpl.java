@@ -75,8 +75,7 @@ public class RoomServiceImpl implements RoomService {
 
             User user = userMapper.selectByPrimaryKey(live.getUid());
             Map<String,Object> map1 = new HashMap<>();
-            map1.put("user_name",user.getName());
-            map1.put("user_id",user.getId());
+            map1.put("user",user);
 
             StringBuffer buffer = new StringBuffer();
             buffer.append("rtmp://").append(liveserver.getDownload())
