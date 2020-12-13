@@ -15,7 +15,5 @@ class MessageBubbleRow(Gtk.Box):
         self.uid = uid
 
     def reverse(self):
-        print(self)
-        print(self.text)
         self.child_set_property(self.text, "pack-type", Gtk.PackType.END)
         self.avatar.destroy()

@@ -138,9 +138,10 @@ class MainWindow(Window):
 
     def ws_send(self, data):
         if self.wsconn:
-            print(f"ws> {data}")
             data['version'] = 1
-            self.wsconn.send_text(json.dumps(data))
+            text = json.dumps(data)
+            print(f"ws> {text}")
+            self.wsconn.send_text(text)
 
     def on_ws_message(self, connection, msg_type, message):
         text = message.get_data().decode()
