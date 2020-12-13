@@ -83,6 +83,7 @@ async def worker(websocket, path):
     uid = payload['uid']
     name = payload['name']
     mid = payload['mid']
+    admin = payload['isAdmin']
     member = await reg(websocket, uid, name, mid)
 
     resp = SignalingMembersListResponse(None, members=meetings[mid])
@@ -99,13 +100,21 @@ async def worker(websocket, path):
 
         print(f"< {signaling}")
         if signaling.type == "broadcast":
-            signaling.from_user = { "id": uid, "name": name }
-            await broadcast(mid, signaling, ignore_uid=uid)
+            if 'op' in signaling.msg:
+                signaling.from_user = { "id": uid, "name": name }
+                if signaling.msg['op'] == 'live':
+                    _ = jwt.decode(msg['token'], config.secret, algorithms=config.algorithms)
+                    del msg['token']
+                    await broadcast(mid, signaling, ignore_uid=uid)
+                elif signaling.msg['op'] == 'text':
+                    await broadcast(mid, signaling, ignore_uid=uid)
+                else:
+                    # FIXME: error notify to user
+                    pass
         elif signaling.type == "end":
-            #FIXME: only admin
-            meetings_stats[mid].is_ending = True
-            await broadcast(mid, signaling, ignore_uid=uid, kill=True)
-            
+            if admin:
+                meetings_stats[mid].is_ending = True
+                await broadcast(mid, signaling, ignore_uid=uid, kill=True)
         else:
             #FIXME: error notify to user
             pass
