@@ -16,6 +16,7 @@ from .asynchelper import async_function
 from .misc import dark_mode_switch, format_date_ml, sharelink
 from .config import *
 from .dialog_create_meeting import CreateMeetingDialog
+from .dialog_start_live import StartLiveDialog
 from .widget_meeting_list_row import MeetingListRow
 from .widget_member_list_row import MemberListRow
 from .widget_message_bubble import MessageBubbleRow
@@ -313,10 +314,7 @@ class MainWindow(Window):
         self.mexit()
 
     def on_start_live_clicked(self, button):
-        pass
-
-    def on_meeting_more_clicked(self, button):
-        pass
+        StartLiveDialog(self)
 
     def on_join_clicked(self, button):
         tmp = self.get("mcode").get_text().split(":")
