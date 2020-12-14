@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-10 21:02+0800\n"
+"POT-Creation-Date: 2020-12-14 13:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,6 +102,12 @@ msgstr "在 ... 时："
 msgid "Minute:"
 msgstr "在 ... 分："
 
+msgid "Webcam/Screen"
+msgstr "摄像头/屏幕"
+
+msgid "Audio Recoder"
+msgstr "音频录制器"
+
 msgid "Login failed, please check your username and password."
 msgstr "登录失败，请检查你的用户名和密码。"
 
@@ -147,3 +153,24 @@ msgstr "%Y年%m月%d日 %H:%M"
 #, python-format
 msgid "From %(from)s, to %(to)s"
 msgstr "从 %(from)s，到 %(to)s"
+
+msgid "V4L2 device: /dev/"
+msgstr "V4L2 设备：/dev/"
+
+msgid "Desktop Screen"
+msgstr "桌面屏幕"
+
+msgid "Default Device"
+msgstr "默认设备"
+
+msgid "ALSA device: "
+msgstr "ALSA 设备："
+
+msgid "Defult Device (ALSA)"
+msgstr "默认设备（ALSA）"
+
+msgid "Defult Device (Pulseaudio)"
+msgstr "默认设备（PulseAudio）"
+
+msgid "Disable"
+msgstr "禁用"
