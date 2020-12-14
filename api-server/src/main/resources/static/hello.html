@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Waking up</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: cursive;
+        }
+        h2 {
+            font-size: xxx-large;
+        }
+        .button {
+            background-color: #555555;
+            border: none;
+            color: white;
+            padding: 5px 18px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        .dcenter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .wrapper {position: relative;}
+        #input {position: absolute;top: 0;left: 0;opacity: 0;z-index: -10;}
+    </style>
+</head>
+<body>
+<div class="dcenter">
+    <div>
+        <h2>我们正在尝试拉起您的本地客户端...</h2>
+    </div>
+    <div style="
+    margin-top: 50px;
+    text-align: center;
+">
+        <span>您还可以选择复制邀请码: <span id="addr"></span>
+            <textarea id="input"></textarea>
+            <button class="button" onclick="copyAddr()">点击复制</button>
+        </span>
+    </div>
+</div>
+<script>
+    var href = new URL(location.href);
+    var addr = href.pathname.substring(href.pathname.lastIndexOf('/') +1);
+    addr_span = document.getElementById("addr");
+    addr_span.innerText = addr;
+    function wakeUp() {
+        console.log("waking up ...");
+    }
+    function copyAddr() {
+        var text = document.getElementById("addr").innerText;
+        var input = document.getElementById("input");
+        input.value = text; // 修改文本框的内容
+        input.select(); // 选中文本
+        document.execCommand("copy"); // 执行浏览器复制命令
+        alert("复制成功");
+    }
+    window.onload = wakeUp();
+</script>
+</body>
+</html>

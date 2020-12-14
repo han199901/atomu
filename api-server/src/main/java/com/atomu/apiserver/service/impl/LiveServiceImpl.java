@@ -76,7 +76,9 @@ public class LiveServiceImpl implements LiveService {
         }
         else {
             live.setUid(meeting.getUid());
-            int line = liveMapper.updateByPrimaryKey(live);
+            live.setUuid(CommonUtil.genUUIDSimple());
+            live.setUpsecret(CommonUtil.genUUIDSimple());
+            liveMapper.updateByPrimaryKey(live);
         }
         Liveserver liveserver = liveserverMapper.selectByPrimaryKey(live.getSid());
         StringBuffer buffer = new StringBuffer();
