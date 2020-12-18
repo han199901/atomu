@@ -417,7 +417,7 @@ If Atomu Client not start, you can try to enter the meeting code manually.</prop
                                 <property name="orientation">vertical</property>
                                 <property name="spacing">12</property>
                                 <child>
-                                  <object class="GtkScrolledWindow">
+                                  <object class="GtkScrolledWindow" id="scroll_messages">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hscrollbar_policy">never</property>
@@ -458,6 +458,7 @@ If Atomu Client not start, you can try to enter the meeting code manually.</prop
                                         <property name="can_focus">True</property>
                                         <property name="show_emoji_icon">True</property>
                                         <property name="enable_emoji_completion">True</property>
+                                        <signal name="activate" handler="on_send_message_activate" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>

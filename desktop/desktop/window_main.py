@@ -191,7 +191,10 @@ class MainWindow(Window):
         lb.add(lr)
         lr.get_parent().set_activatable(False)
 
-    def on_send_message_clicked(self, button):
+        adj = self.get("scroll_messages").get_vadjustment()
+        adj.set_value(adj.get_upper())
+
+    def on_send_message_clicked(self, widget):
         entry = self.get("send_message")
         text = entry.get_text()
         self.ws_send({
@@ -203,6 +206,9 @@ class MainWindow(Window):
         })
         self.add_msg_bubble(get_uid(), "", text)
         entry.set_text("")
+
+    def on_send_message_activate(self, widget):
+        self.on_send_message_clicked(widget)
 
     def on_ws_closed(self, connection):
         print("on_ws_closed")

@@ -74,3 +74,7 @@ class LoginWindow(Window):
             "name": username,
             "password": password
         }, on_done)
+
+    def on_password_activate(self, widget):
+        button = self.get("login_button")
+        self.on_login_clicked(button)
