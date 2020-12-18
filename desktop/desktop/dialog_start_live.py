@@ -24,6 +24,8 @@ class DevWebcam(GObject.Object):
         if extra_options:
             self.extra_options = extra_options
 
+        print(f"DevWebcam found: {self.__dict__}")
+
 class DevAudioRecoder(GObject.Object):
     def __init__(self, name, options=None):
         super().__init__()
@@ -31,6 +33,8 @@ class DevAudioRecoder(GObject.Object):
         self.options = None
         if options:
             self.options = options
+
+        print(f"DevAudioRecoder found: {self.__dict__}")
 
 def list_webcam_linux():
     tmp = [i for i in os.listdir("/dev/") if re.match(r"^video[0-9]+$", i)]
@@ -57,17 +61,19 @@ def colon_escape(i):
     return i.replace(":", "\\:")
 
 def list_webcam_windows():
-    tmp = []
+    from . import winext
+    tmp = winext.device.getVideoInputDeviceList()
+    tmp = list(map(lambda i: DevWebcam(_("DirectShow device: ") + i, "dshow://", extra_options=[f":dshow-vdev={colon_escape(i)}"]), tmp))
     tmp.insert(0, DevWebcam(_("Desktop Screen"), "screen://", extra_options=[":input-slave=dshow://"]))
     tmp.insert(0, DevWebcam(_("Default Device"), "dshow://"))
-    #tmp.insert(0, DevWebcam(_("Default Device"), "dshow://"), extra_options=[':dshow-vdev=xxxx'])
     return tmp
 
 def list_audiorecoder_windows():
-    tmp = []
+    from . import winext
+    tmp = winext.device.getAudioInputDeviceList()
+    tmp = list(map(lambda i: DevAudioRecoder(_("DirectShow device: ") + i, options=[f":dshow-adev={colon_escape(i)}"]), tmp))
     tmp.insert(0, DevAudioRecoder(_("Default Device")))
-    tmp.insert(0, DevAudioRecoder(_("Disable"), ":dshow-adev=none"))
-    #tmp.insert(0, DevAudioRecoder("",":dshow-adev=xxx"))
+    tmp.insert(0, DevAudioRecoder(_("Disable"), options=[":dshow-adev=none"]))
     return tmp
 
 class StartLiveDialog(Window):
@@ -105,7 +111,6 @@ class StartLiveDialog(Window):
         self.window.show_all()
 
     def on_ok_clicked(self, button):
-
         def on_done(r, e):
             button.set_sensitive(True)
 
@@ -116,8 +121,7 @@ class StartLiveDialog(Window):
             except CError as e:
                 self.defexphandler(e)
 
-        api_async("/meeting/create", {
-            "name": name,
-            "start": btime.isoformat(),
-            "end": etime.isoformat()
+        api_async("/live/start", {
+            "id": self.mid,
+            "code": self.mcode
         }, on_done)
