@@ -10,6 +10,7 @@ from .asynchelper import async_function
 from .misc import dark_mode_switch
 from .config import *
 from .window_main import MainWindow
+from .defaults import *
 
 class LoginWindow(Window):
     def __init__(self, app):
@@ -20,6 +21,10 @@ class LoginWindow(Window):
         if config_get("user_auth_uid", None):
             set_code(config_get("user_auth_uid", None), config_get("user_auth_code", None))
             self.login()
+
+        self.get("reg_tip").set_markup(_("Don't have an account yet?\n<a href=\"%(prefix)s/register.html\">Register Now</a>") % {
+            "prefix": URL_PREFIX
+        })
 
     def login(self):
         button = self.get("login_button")
