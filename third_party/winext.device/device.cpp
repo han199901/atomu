@@ -129,7 +129,7 @@ getVideoInputDeviceList(PyObject *self, PyObject *args)
 {
 	PyObject* pyList = NULL; 
 	
-	HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 	if (SUCCEEDED(hr))
 	{
 		IEnumMoniker *pEnum;
@@ -151,7 +151,7 @@ getAudioInputDeviceList(PyObject *self, PyObject *args)
 {
 	PyObject* pyList = NULL; 
 	
-	HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 	if (SUCCEEDED(hr))
 	{
 		IEnumMoniker *pEnum;
