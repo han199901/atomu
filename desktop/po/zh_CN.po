@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-14 13:04+0800\n"
+"POT-Creation-Date: 2020-12-19 03:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,11 +28,6 @@ msgstr "密码"
 
 msgid "Login"
 msgstr "登录"
-
-msgid ""
-"Don't have an account yet?\n"
-"<a href=\"www.google.com\">Register Now</a>"
-msgstr ""
 
 msgid "Exit"
 msgstr "退出"
@@ -132,6 +127,14 @@ msgstr "网络错误，请检查你的网络连接。"
 msgid "Unknown error"
 msgstr "未知错误"
 
+#, python-format
+msgid ""
+"Don't have an account yet?\n"
+"<a href=\"%(prefix)s/register.html\">Register Now</a>"
+msgstr ""
+"还没有账户？\n"
+"<a href=\"%(prefix)s/register.html\">立即注册</a>"
+
 msgid "Shared link copied to clipboard"
 msgstr "分享链接已复制到剪贴板"
 
@@ -174,3 +177,6 @@ msgstr "默认设备（PulseAudio）"
 
 msgid "Disable"
 msgstr "禁用"
+
+msgid "DirectShow device: "
+msgstr "DirectShow 设备："
