@@ -6,6 +6,7 @@ from gi.repository import Gtk, Gio, GLib, Gdk
 import requests
 
 from .asynchelper import async_function
+from .defaults import *
 
 __all__ = [
     "CError",
@@ -20,7 +21,7 @@ __all__ = [
     "reload_token_async"
 ]
 
-prefix = "http://help.hanblog.fun/api"
+prefix = f"{URL_PREFIX}/api"
 _uid = None
 _code = None
 _token = None

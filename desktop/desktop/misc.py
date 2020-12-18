@@ -10,6 +10,7 @@ from dateutil.tz import gettz
 from datetime import datetime
 
 from .config import *
+from .defaults import *
 
 tz = gettz(str(tzlocal.get_localzone()))
 
@@ -57,4 +58,4 @@ def format_date_ml(begin, end):
     })
 
 def sharelink(id, code):
-    return f"http://help.hanblog.fun/join/{id}:{code}"
+    return f"{URL_PREFIX}/join/{id}:{code}"
