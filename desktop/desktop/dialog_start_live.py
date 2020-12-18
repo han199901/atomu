@@ -14,27 +14,8 @@ from .window import Window
 from .asynchelper import async_function
 from .misc import dark_mode_switch, tz
 from .config import *
-
-class DevWebcam(GObject.Object):
-    def __init__(self, name, mrl, extra_options=None):
-        super().__init__()
-        self.name = name
-        self.mrl = mrl
-        self.extra_options = None
-        if extra_options:
-            self.extra_options = extra_options
-
-        print(f"DevWebcam found: {self.__dict__}")
-
-class DevAudioRecoder(GObject.Object):
-    def __init__(self, name, options=None):
-        super().__init__()
-        self.name = name
-        self.options = None
-        if options:
-            self.options = options
-
-        print(f"DevAudioRecoder found: {self.__dict__}")
+from .push import DevWebcam, DevAudioRecoder
+from .defaults import *
 
 def list_webcam_linux():
     tmp = [i for i in os.listdir("/dev/") if re.match(r"^video[0-9]+$", i)]
@@ -116,7 +97,21 @@ class StartLiveDialog(Window):
 
             try:
                 result = finish(r, e)
-                self.parent.list_all_my_meetings()
+
+                videos = self.get("videos")
+                audios = self.get("audios")
+
+                i = videos.get_active_iter()
+                model = videos.get_model()
+                dwebcam = model[i][1]
+
+                i = audios.get_active_iter()
+                model = audios.get_model()
+                darec = model[i][1]
+
+                self.parent.push.start(dwebcam, darec, DEFAULT_VLC_SOUT_TEMP % ({
+                    "RTMP_URI": "rtmp://127.0.0.1/live/", #FIXME
+                }))
                 self.window.close()
             except CError as e:
                 self.defexphandler(e)

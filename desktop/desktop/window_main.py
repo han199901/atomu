@@ -21,6 +21,7 @@ from .widget_meeting_list_row import MeetingListRow
 from .widget_member_list_row import MemberListRow
 from .widget_message_bubble import MessageBubbleRow
 from .vlc import VLCWidget
+from .push import StreamPush
 
 class MainWindow(Window):
     def __init__(self, app):
@@ -55,6 +56,7 @@ class MainWindow(Window):
         self.vlc = None
         self.session = None
         self.wsconn = None
+        self.push = StreamPush()
 
     def on_meeting_delete_clicked(self, button, row, id, code):
         def on_done(r, e):
@@ -289,6 +291,7 @@ class MainWindow(Window):
         if self.vlc:
             self.vlc.stop()
 
+        self.push.stop()
         self.get("stack_main").set_visible_child_name("join")
 
     def on_mexit_only_clicked(self, button):
