@@ -25,6 +25,9 @@ class StreamPush:
     def __init__(self):
         self.p = None
 
+    def is_alive(self):
+        return (self.p is not None)
+
     def stop(self):
         if self.p:
             self.p.force_exit()

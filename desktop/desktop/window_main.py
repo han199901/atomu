@@ -180,6 +180,8 @@ class MainWindow(Window):
             msg = obj['msg']
             if msg['op'] == "text":
                 self.add_msg_bubble(obj['from_user']['id'], obj['from_user']['name'], msg['text'])
+            elif msg['op'] == "live":
+                self.switch_live_source(msg['url'], obj['from_user']['name'])
             else:
                 print(f"unknown msg op {msg['op']}")
         else:
@@ -241,10 +243,15 @@ class MainWindow(Window):
             pass
             #self.get("spinner").stop()
 
+    def switch_live_source(self, url, username):
+        # FIXME
+        print(url)
+        print(username)
+        self.vlc.set_mrl(url)
+
     def menter(self, msgserver, meeting, token):
         if not self.vlc:
             self.vlc = VLCWidget(self.get("vlc"))
-            #self.vlc.set_mrl("/media/th/disk2/th/bitcoin.mp4")
 
         tmp = self.get("messages")
         for i in tmp:
@@ -275,6 +282,9 @@ class MainWindow(Window):
                 callback()
                 result = finish(r, e)
                 self.menter(result["msgserver"], result["meeting"], result["token"])
+
+                if "live" in result:
+                    self.switch_live_source(result["live"]["download_addr"], result["live"]["user"]["name"])
             except CError as e:
                 self.defexphandler(e)
 
@@ -335,15 +345,21 @@ class MainWindow(Window):
         def on_exit(result): #TODO: result stub
             pass
 
+        def notify():
+            if self.push.is_alive():
+                self.ws_send({
+                    "type": "broadcast",
+                    "msg": {
+                        "op": "live",
+                        "url": sburl,
+                        "token": token
+                    }
+                })
+                # FIXME: clear vlc
+                self.vlc.stop()
+
         self.push.start(devcam, devarec, sout, on_exit)
-        self.ws_send({
-            "type": "broadcast",
-            "msg": {
-                "op": "live",
-                "url": sburl,
-                "token": token
-            }
-        })
+        GLib.timeout_add_seconds(3, notify)
 
     def on_join_clicked(self, button):
         tmp = self.get("mcode").get_text().split(":")

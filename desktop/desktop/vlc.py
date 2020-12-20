@@ -45,6 +45,7 @@ class VLCWidget:
         cairo_ctx.paint()
 
     def set_mrl(self, mrl):
+        self.player.stop()
         self.player.set_mrl(mrl)
         self.player.play()
         
