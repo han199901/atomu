@@ -106,6 +106,8 @@ async def worker(websocket, path):
                     _ = jwt.decode(signaling.msg['token'], config.secret, algorithms=config.algorithms)
                     del signaling.msg['token']
                     await broadcast(mid, signaling, ignore_uid=uid)
+                elif signaling.msg['op'] == 'live-end':
+                    await broadcast(mid, signaling, ignore_uid=uid)
                 elif signaling.msg['op'] == 'text':
                     await broadcast(mid, signaling, ignore_uid=uid)
                 else:
@@ -122,7 +124,7 @@ async def worker(websocket, path):
     await unreg(mid, uid)
 
 def main():
-    start_server = websockets.serve(worker, "localhost", 8765)
+    start_server = websockets.serve(worker, "0.0.0.0", 8765)
 
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
