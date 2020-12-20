@@ -1,6 +1,7 @@
 package com.atomu.apiserver.entity;
 
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Meeting {
     @Override
@@ -20,7 +21,7 @@ public class Meeting {
     private String name;
 
     private Integer uid;
-
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String code;
 
     private Date start;

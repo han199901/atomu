@@ -3,15 +3,6 @@ package com.atomu.apiserver.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class User {
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", code='" + code + '\'' +
-                '}';
-    }
 
     private Integer id;
 
@@ -20,6 +11,16 @@ public class User {
     private String password;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String code;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String salt;
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 
     public Integer getId() {
         return id;

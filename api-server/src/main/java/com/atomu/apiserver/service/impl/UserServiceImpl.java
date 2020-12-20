@@ -28,9 +28,12 @@ public class UserServiceImpl implements UserService {
         else {
             Map<String,Object> map = new HashMap<>();
             User searchUser = userMapper.selectByName(user.getName());
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(user.getPassword()).append(searchUser.getSalt());
+            String passwd = buffer.toString();
             if(searchUser==null)
                 return null;
-            else if(CommonUtil.Password2Md5(user.getPassword()).equals(searchUser.getPassword())) {
+            else if(CommonUtil.Password2Md5(passwd).equals(searchUser.getPassword())) {
                 user = searchUser;
                 map.put("userObject",searchUser);
                 String auth = JwtUtil.genAuth();
@@ -76,10 +79,14 @@ public class UserServiceImpl implements UserService {
             return ErrorCode.INVALID_NAME_OR_PASSWORD;
         }
         String username = user.getName();
-        String password = CommonUtil.Password2Md5(user.getPassword());
+        StringBuffer buffer = new StringBuffer();
+        String salt = CommonUtil.genUUIDSimple();
+        buffer.append(user.getPassword()).append(salt);
+        String password = CommonUtil.Password2Md5(buffer.toString());
         if(userMapper.selectByName(username)!=null)
             return ErrorCode.USER_NAME_EXIST;
         user.setPassword(password);
+        user.setSalt(salt);
         userMapper.insert(user);
         return 0;
     }

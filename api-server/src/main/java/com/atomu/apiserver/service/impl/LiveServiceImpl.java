@@ -86,9 +86,7 @@ public class LiveServiceImpl implements LiveService {
                 .append(liveserver.getUpload())
                 .append("/live")
                 .append("/")
-                .append(live.getUuid())
-                .append("/")
-                .append(live.getUpsecret());
+                .append(live.getUuid());
         res.put("upload_addr",buffer.toString());
         return res;
     }
