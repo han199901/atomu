@@ -1,51 +1,60 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from gi.repository import GObject
+from gi.repository import GObject, Gio
 
 import ctypes
 
-import vlc
-
 class DevWebcam(GObject.Object):
-    def __init__(self, name, mrl, extra_options=None):
+    def __init__(self, name, options):
         super().__init__()
         self.name = name
-        self.mrl = mrl
-        self.extra_options = None
-        if extra_options:
-            self.extra_options = extra_options
+        self.options = options
 
         print(f"DevWebcam found: {self.__dict__}")
 
 class DevAudioRecoder(GObject.Object):
-    def __init__(self, name, options=None):
+    def __init__(self, name, options):
         super().__init__()
         self.name = name
-        self.options = None
-        if options:
-            self.options = options
+        self.options = options
 
         print(f"DevAudioRecoder found: {self.__dict__}")
 
 class StreamPush:
     def __init__(self):
-        self.vlcInstance = vlc.Instance(["--no-xlib"])
+        self.p = None
 
     def stop(self):
-        self.vlcInstance.vlm_stop_media("def")
+        if self.p:
+            self.p.force_exit()
+            self.p = None
 
-    def start(self, video: DevWebcam, audio: DevAudioRecoder, sout: str):
-        self.vlcInstance.vlm_stop_media("def")
+    def start(self, video: DevWebcam, audio: DevAudioRecoder, sout: str, on_exit):
+        self.stop()
 
-        options = video.extra_options
-        if not options:
-            options = []
+        options = ["ffmpeg"]
+
+        if video.options:
+            options.extend(video.options)
         if audio.options:
             options.extend(audio.options)
 
-        l = len(options)
-        options = list(map(lambda i: i.encode('utf-8'), options))
+        options.extend(["-f", "rtsp", sout])
 
-        self.vlcInstance.vlm_add_broadcast("def", video.mrl, sout, l, options, True, False)
-        self.vlcInstance.vlm_play_media("def")
+        flags = Gio.SubprocessFlags.STDOUT_SILENCE | Gio.SubprocessFlags.STDERR_SILENCE
+        self.p = Gio.Subprocess.new(options, flags)
+
+        print(f'start process: {" ".join(options)}')
+
+        def on_done(p, result):
+            print("process done.")
+            try:
+                p.wait_check_finish(result)
+            except Exception as e:
+                print(e)
+
+            self.stop()
+            on_exit(None)
+
+        self.p.wait_check_async(None, on_done)

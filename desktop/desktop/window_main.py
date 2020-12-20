@@ -58,6 +58,11 @@ class MainWindow(Window):
         self.wsconn = None
         self.push = StreamPush()
 
+        self.window.connect("destroy", self.on_window_destroy)
+
+    def on_window_destroy(self, widget):
+        self.push.stop()
+
     def on_meeting_delete_clicked(self, button, row, id, code):
         def on_done(r, e):
             try:
@@ -324,6 +329,20 @@ class MainWindow(Window):
 
     def on_start_live_clicked(self, button):
         StartLiveDialog(self)
+
+    def push_start(self, devcam, devarec, sout, sburl, token):
+        def on_exit(result): #TODO: result stub
+            pass
+
+        self.push.start(devcam, devarec, sout, on_exit)
+        self.ws_send({
+            "type": "broadcast",
+            "msg": {
+                "op": "live",
+                "url": sburl,
+                "token": token
+            }
+        })
 
     def on_join_clicked(self, button):
         tmp = self.get("mcode").get_text().split(":")
