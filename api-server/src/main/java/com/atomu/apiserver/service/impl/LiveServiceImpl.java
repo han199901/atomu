@@ -44,6 +44,7 @@ public class LiveServiceImpl implements LiveService {
             res.put("code",ErrorCode.NO_MEETING);
             return res;
         }
+        searched.setCode(null);
         Date date = new Date(System.currentTimeMillis());
         if(date.before(searched.getStart())) {
             res.put("code", ErrorCode.MEETING_IS_NOT_START);

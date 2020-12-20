@@ -21,7 +21,7 @@ public class Meeting {
     private String name;
 
     private Integer uid;
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
     private String code;
 
     private Date start;
