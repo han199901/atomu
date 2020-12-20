@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-20 18:32+0800\n"
+"POT-Creation-Date: 2020-12-21 03:09+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,6 +69,9 @@ msgstr "消息"
 
 msgid "Start my live"
 msgstr "开始直播"
+
+msgid "Stop my live"
+msgstr "停止直播"
 
 msgid "More"
 msgstr "更多"
@@ -144,6 +147,13 @@ msgstr "未命名的会议"
 msgid "Can not enter meeting room."
 msgstr "无法进入会议室。"
 
+#, python-format
+msgid "%(username)s is live streaming."
+msgstr "%(username)s 正在直播。"
+
+msgid "No one is live streaming."
+msgstr "没有人在直播。"
+
 msgid "End meeting"
 msgstr "结束会议"
 
@@ -184,5 +194,8 @@ msgstr "默认设备（ALSA）"
 msgid "Defult Device (Pulseaudio)"
 msgstr "默认设备（PulseAudio）"
 
-#~ msgid "DirectShow device: "
-#~ msgstr "DirectShow 设备："
+msgid "DirectShow device: "
+msgstr "DirectShow 设备："
+
+msgid "Desktop Screen"
+msgstr "桌面屏幕"
