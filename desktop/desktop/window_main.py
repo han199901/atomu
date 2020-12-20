@@ -302,6 +302,8 @@ class MainWindow(Window):
         if self.vlc:
             self.vlc.stop()
 
+        self.list_all_my_meetings()
+
         self.push.stop()
         self.get("stack_main").set_visible_child_name("join")
 
@@ -323,7 +325,6 @@ class MainWindow(Window):
             self.ws_send({
                 "type": "end"
             })
-            self.list_all_my_meetings()
 
         self.mexit()
 
