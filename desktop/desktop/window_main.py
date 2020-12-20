@@ -48,7 +48,7 @@ class MainWindow(Window):
 
         self.list_all_my_meetings()
 
-        self.window.show_all()
+        self.window.show()
 
         self.madmin = False
         self.mid = None
@@ -57,6 +57,8 @@ class MainWindow(Window):
         self.session = None
         self.wsconn = None
         self.push = StreamPush()
+        self.sburl = None
+        self.living_userid = None
 
         self.window.connect("destroy", self.on_window_destroy)
 
@@ -181,7 +183,10 @@ class MainWindow(Window):
             if msg['op'] == "text":
                 self.add_msg_bubble(obj['from_user']['id'], obj['from_user']['name'], msg['text'])
             elif msg['op'] == "live":
-                self.switch_live_source(msg['url'], obj['from_user']['name'])
+                self.switch_live_source(msg['url'], obj['from_user']['id'], obj['from_user']['name'])
+            elif msg['op'] == "live-end":
+                if obj["from_user"]["id"] == self.living_userid:
+                    self.switch_live_source(None, obj['from_user']['id'], obj['from_user']['name'])
             else:
                 print(f"unknown msg op {msg['op']}")
         else:
@@ -243,11 +248,17 @@ class MainWindow(Window):
             pass
             #self.get("spinner").stop()
 
-    def switch_live_source(self, url, username):
-        # FIXME
-        print(url)
-        print(username)
-        self.vlc.set_mrl(url)
+    def switch_live_source(self, url, uid, username):
+        if url:
+            self.push_stop()
+            self.living_userid = uid
+            self.vlc.set_mrl(url)
+            self.get("live_status").set_text(_("%(username)s is live streaming.") % {
+                "username": username
+            })
+        else:
+            self.vlc.stop()
+            self.get("live_status").set_text(_("No one is live streaming."))
 
     def menter(self, msgserver, meeting, token):
         if not self.vlc:
@@ -284,7 +295,7 @@ class MainWindow(Window):
                 self.menter(result["msgserver"], result["meeting"], result["token"])
 
                 if "live" in result:
-                    self.switch_live_source(result["live"]["download_addr"], result["live"]["user"]["name"])
+                    self.switch_live_source(result["live"]["download_addr"], result["live"]["user"]["id"], result["live"]["user"]["name"])
             except CError as e:
                 self.defexphandler(e)
 
@@ -341,12 +352,31 @@ class MainWindow(Window):
     def on_start_live_clicked(self, button):
         StartLiveDialog(self)
 
+    def on_stop_live_clicked(self, button):
+        self.push_stop()
+
+    def push_stop(self):
+        self.push.stop()
+        self.get("button_stop_live").set_visible(False)
+        self.get("button_start_live").set_visible(True)
+
+        self.ws_send({
+            "type": "broadcast",
+            "msg": {
+                "op": "live-end",
+                "url": self.sburl
+            }
+        })
+
     def push_start(self, devcam, devarec, sout, sburl, token):
-        def on_exit(result): #TODO: result stub
-            pass
+        def on_exit(result):
+            self.push_stop()
 
         def notify():
             if self.push.is_alive():
+                self.get("button_start_live").set_sensitive(True)
+                self.sburl = sburl
+
                 self.ws_send({
                     "type": "broadcast",
                     "msg": {
@@ -355,10 +385,15 @@ class MainWindow(Window):
                         "token": token
                     }
                 })
-                # FIXME: clear vlc
+
                 self.vlc.stop()
+                self.get("live_status").set_text("")
+
+                self.get("button_stop_live").set_visible(True)
+                self.get("button_start_live").set_visible(False)
 
         self.push.start(devcam, devarec, sout, on_exit)
+        self.get("button_start_live").set_sensitive(False)
         GLib.timeout_add_seconds(3, notify)
 
     def on_join_clicked(self, button):

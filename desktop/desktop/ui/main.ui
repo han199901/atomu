@@ -110,6 +110,11 @@
     <property name="can_focus">False</property>
     <property name="icon_name">mail-reply-sender-symbolic</property>
   </object>
+  <object class="GtkImage" id="image9">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">media-playback-stop-symbolic</property>
+  </object>
   <object class="GtkApplicationWindow" id="window">
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
@@ -385,24 +390,52 @@ If Atomu Client not start, you can try to enter the meeting code manually.</prop
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
-                              <object class="GtkScrolledWindow">
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="hscrollbar_policy">never</property>
-                                <property name="shadow_type">in</property>
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">12</property>
                                 <child>
-                                  <object class="GtkViewport">
+                                  <object class="GtkLabel" id="live_status">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="margin_left">12</property>
+                                    <property name="margin_right">12</property>
+                                    <property name="wrap">True</property>
+                                    <property name="wrap_mode">char</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkScrolledWindow">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="hscrollbar_policy">never</property>
+                                    <property name="shadow_type">in</property>
                                     <child>
-                                      <object class="GtkListBox" id="members">
+                                      <object class="GtkViewport">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="selection_mode">none</property>
-                                        <property name="activate_on_single_click">False</property>
+                                        <child>
+                                          <object class="GtkListBox" id="members">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="selection_mode">none</property>
+                                            <property name="activate_on_single_click">False</property>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
                                 </child>
                               </object>
                               <packing>
@@ -533,7 +566,7 @@ If Atomu Client not start, you can try to enter the meeting code manually.</prop
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton">
+                              <object class="GtkButton" id="button_start_live">
                                 <property name="label" translatable="yes">Start my live</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -548,6 +581,23 @@ If Atomu Client not start, you can try to enter the meeting code manually.</prop
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_stop_live">
+                                <property name="label" translatable="yes">Stop my live</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="image">image9</property>
+                                <property name="relief">none</property>
+                                <property name="image_position">top</property>
+                                <property name="always_show_image">True</property>
+                                <signal name="clicked" handler="on_stop_live_clicked" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                             <child>
@@ -594,7 +644,7 @@ If Atomu Client not start, you can try to enter the meeting code manually.</prop
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">2</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                           </object>
