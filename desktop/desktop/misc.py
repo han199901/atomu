@@ -38,12 +38,13 @@ def dark_mode_switch(switch):
 
 def format_date(date, cur):
     tmp = date - cur
-    if tmp.days <= 0:
-        return date.strftime("%H:%M")
-    #elif tmp.year == 0:
-    #    return date.strftime(_("%d %b %H:%M"))
-    else:
-        return date.strftime(_("%d %b %Y %H:%M"))
+    if date.year == cur.year:
+        if date.month == cur.month:
+            if date.day == cur.day:
+                return date.strftime("%H:%M")
+            return date.strftime(_("%d %H:%M"))
+        return date.strftime(_("%d %b %H:%M"))
+    return date.strftime(_("%d %b %Y %H:%M"))
 
 def format_date_ml(begin, end):
     cur = datetime.now(tz)

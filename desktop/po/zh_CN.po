@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-20 17:53+0800\n"
+"POT-Creation-Date: 2020-12-20 18:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,6 +149,12 @@ msgstr "结束会议"
 
 msgid "Invalid meeting code"
 msgstr "会议代码无效"
+
+msgid "%d %H:%M"
+msgstr "%d日 %H:%M"
+
+msgid "%d %b %H:%M"
+msgstr "%m月%d日 %H:%M"
 
 msgid "%d %b %Y %H:%M"
 msgstr "%Y年%m月%d日 %H:%M"
