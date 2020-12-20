@@ -18,8 +18,10 @@ from .push import DevWebcam, DevAudioRecoder
 from .defaults import *
 
 def list_webcam_linux(window):
+    def_v4l2 = None
     tmp = [i for i in os.listdir("/dev/") if re.match(r"^video[0-9]+$", i)]
-    def_v4l2 = "/dev/" + tmp[-1]
+    if len(tmp) > 0:
+        def_v4l2 = "/dev/" + tmp[-1]
 
     tmp = list(map(lambda i: DevWebcam(_("V4L2 device: /dev/") + i, ["-f", "v4l2", "-i", "/dev/" + i]), tmp))
 
@@ -28,7 +30,8 @@ def list_webcam_linux(window):
         vs = str(screen.get_width()) + "x" + str(screen.get_height())
         tmp.insert(0, DevWebcam(_("Desktop Screen (X11)"), ["-framerate", "25", "-f", "x11grab", "-s", vs, "-i", os.environ["DISPLAY"]]))
 
-    tmp.insert(0, DevWebcam(_("Default Device"), ["-f", "v4l2", "-i", def_v4l2]))
+    if def_v4l2:
+        tmp.insert(0, DevWebcam(_("Default Device"), ["-f", "v4l2", "-i", def_v4l2]))
 
     return tmp
 
@@ -39,36 +42,48 @@ def list_audiorecoder_linux():
         i = re.sub(r'D', ',', i)
         return DevAudioRecoder(_("ALSA device: ") + i, ["-f", "alsa", "-i", i])
 
+    def_alsa = None
     tmp = [i for i in os.listdir("/dev/snd/") if re.match(r"^pcmC.*D.*c$", i)]
-    def_alsa = tmp[0]
+    if len(tmp) > 0:
+        def_alsa = tmp[0]
+
     tmp = list(map(lambda i: chname(i), tmp))
     tmp.insert(0, DevAudioRecoder(_("Disable"), None))
-    tmp.insert(0, DevAudioRecoder(_("Defult Device (ALSA)"), ["-f", "alsa", "-i", def_alsa]))
+    if def_alsa:
+        tmp.insert(0, DevAudioRecoder(_("Defult Device (ALSA)"), ["-f", "alsa", "-i", def_alsa]))
     tmp.insert(0, DevAudioRecoder(_("Defult Device (Pulseaudio)"), ["-f", "pulse", "-i", "default"]))
     return tmp
 
-def colon_escape(i):
-    return i.replace(":", "\\:")
+def win_escape(i):
+    return i
 
 def list_webcam_windows():
     from . import winext
-    """
+
+    def_dshow = None
     tmp = winext.device.getVideoInputDeviceList()
-    tmp = list(map(lambda i: DevWebcam(_("DirectShow device: ") + i, "dshow://", extra_options=[f":dshow-vdev={colon_escape(i)}"]), tmp))
-    tmp.insert(0, DevWebcam(_("Desktop Screen"), "screen://", extra_options=[":input-slave=dshow://"]))
-    tmp.insert(0, DevWebcam(_("Default Device"), "dshow://"))
+    if len(tmp) > 0:
+        def_dshow = tmp[0]
+
+    tmp = list(map(lambda i: DevWebcam(_("DirectShow device: ") + i, ["-f", "dshow", "-i", f"video={win_escape(i)}"]), tmp))
+    tmp.insert(0, DevWebcam(_("Desktop Screen"), ["-framerate", "25", "-f", "gdigrab", "-i", "desktop"]))
+    if def_dshow:
+        tmp.insert(0, DevWebcam(_("Default Device"), ["-f", "dshow", "-i", f"video={win_escape(def_dshow)}"]))
     return tmp
-    """
 
 def list_audiorecoder_windows():
     from . import winext
-    """
+
+    def_dshow = None
     tmp = winext.device.getAudioInputDeviceList()
-    tmp = list(map(lambda i: DevAudioRecoder(_("DirectShow device: ") + i, options=[f":dshow-adev={colon_escape(i)}"]), tmp))
-    tmp.insert(0, DevAudioRecoder(_("Default Device")))
-    tmp.insert(0, DevAudioRecoder(_("Disable"), options=[":dshow-adev=none"]))
+    if len(tmp) > 0:
+        def_dshow = tmp[0]
+
+    tmp = list(map(lambda i: DevAudioRecoder(_("DirectShow device: ") + i, ["-f", "dshow", "-i", f"audio={win_escape(i)}"]), tmp))
+    tmp.insert(0, DevAudioRecoder(_("Disable"), None))
+    if def_dshow:
+        tmp.insert(0, DevAudioRecoder(_("Default Device"), ["-f", "dshow", "-i", f"audio={win_escape(def_dshow)}"]))
     return tmp
-    """
 
 class StartLiveDialog(Window):
     def __init__(self, parent):
