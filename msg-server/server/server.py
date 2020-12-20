@@ -103,8 +103,8 @@ async def worker(websocket, path):
             if 'op' in signaling.msg:
                 signaling.from_user = { "id": uid, "name": name }
                 if signaling.msg['op'] == 'live':
-                    _ = jwt.decode(msg['token'], config.secret, algorithms=config.algorithms)
-                    del msg['token']
+                    _ = jwt.decode(signaling.msg['token'], config.secret, algorithms=config.algorithms)
+                    del signaling.msg['token']
                     await broadcast(mid, signaling, ignore_uid=uid)
                 elif signaling.msg['op'] == 'text':
                     await broadcast(mid, signaling, ignore_uid=uid)
