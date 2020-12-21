@@ -9,6 +9,7 @@ import com.atomu.apiserver.service.MeetingService;
 import com.atomu.apiserver.util.CommonUtil;
 import com.atomu.apiserver.util.ErrorCode;
 import com.atomu.apiserver.util.JwtUtil;
+import com.atomu.apiserver.util.StreamAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,13 +83,8 @@ public class LiveServiceImpl implements LiveService {
             liveMapper.updateByPrimaryKey(live);
         }
         Liveserver liveserver = liveserverMapper.selectByPrimaryKey(live.getSid());
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("rtmp://")
-                .append(liveserver.getUpload())
-                .append("/live")
-                .append("/")
-                .append(live.getUuid());
-        res.put("upload_addr",buffer.toString());
+        res.put("upload_addr", StreamAddress.generateUploadAddress(liveserver, live));
+        res.put("download_addr", StreamAddress.generateDownloadAddress(liveserver, live));
         return res;
     }
 

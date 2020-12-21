@@ -6,6 +6,7 @@ import com.atomu.apiserver.service.MeetingService;
 import com.atomu.apiserver.service.RoomService;
 import com.atomu.apiserver.util.ErrorCode;
 import com.atomu.apiserver.util.JwtUtil;
+import com.atomu.apiserver.util.StreamAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,13 +77,7 @@ public class RoomServiceImpl implements RoomService {
             User user = userMapper.selectByPrimaryKey(live.getUid());
             Map<String,Object> map1 = new HashMap<>();
             map1.put("user",user);
-
-            StringBuffer buffer = new StringBuffer();
-            buffer.append("rtmp://").append(liveserver.getDownload())
-                    .append("/live").append("/").append(live.getUuid());
-            String download = buffer.toString();
-            map1.put("download_addr",download);
-
+            map1.put("download_addr", StreamAddress.generateDownloadAddress(liveserver, live));
             res.put("live",map1);
         }
         return res;
