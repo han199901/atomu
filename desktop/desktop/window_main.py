@@ -304,17 +304,6 @@ class MainWindow(Window):
             "code": code
         }, on_done)
 
-    def destroy_meeting(self, mid):
-        def on_done(r, e):
-            try:
-                result = finish(r, e)
-            except CError as e:
-                self.defexphandler(e)
-
-        api_async("/room/close", {
-            "id": mid
-        }, on_done)
-
     def mexit(self):
         if self.wsconn:
             self.wsconn.close(0)
@@ -341,13 +330,27 @@ class MainWindow(Window):
             self.window.fullscreen()
 
     def on_mexit_clicked(self, button):
-        if self.madmin:
-            self.destroy_meeting(self.mid)
-            self.ws_send({
-                "type": "end"
-            })
+        if not self.madmin:
+            return
 
-        self.mexit()
+        def on_done(r, e):
+            button.set_sensitive(True)
+
+            try:
+                result = finish(r, e)
+
+                self.ws_send({
+                    "type": "end"
+                })
+
+                self.mexit()
+            except CError as e:
+                self.defexphandler(e)
+
+        button.set_sensitive(False)
+        api_async("/room/close", {
+            "id": self.mid
+        }, on_done)
 
     def on_start_live_clicked(self, button):
         StartLiveDialog(self)
