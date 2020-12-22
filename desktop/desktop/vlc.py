@@ -35,7 +35,7 @@ class VLCWidget:
             gdkdll = ctypes.CDLL('libgdk-3.0.dylib')
             get_nsview = gdkdll.gdk_quaerz_window_get_nsview
             get_nsview.restype, get_nsview.argtypes = [ctypes.c_void_p],  ctypes.c_void_p
-            self.player.set_nsobject(get_nsview(get_window_pointer(self.get_window())))
+            self.player.set_nsobject(get_nsview(self.get_window_pointer(draw_area.get_window())))
         else:
             from gi.repository import GdkX11
             self.player.set_xwindow(self.draw_area.get_window().get_xid())
