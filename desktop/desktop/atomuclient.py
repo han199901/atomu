@@ -13,8 +13,6 @@ import os
 
 def init():
     data_dir = os.path.dirname(__file__)
-    gettext.bindtextdomain("atomudesktop", f"{data_dir}/mo")
-    gettext.textdomain("atomudesktop")
 
     if os.name == "nt":
         libintl = ctypes.cdll.LoadLibrary("libintl-8.dll")
@@ -29,9 +27,16 @@ def init():
         os.environ['PYTHON_VLC_MODULE_PATH'] = vlc_path
         os.environ['PYTHON_VLC_LIB_PATH'] = os.path.join(vlc_path, "libvlc.dll")
         os.add_dll_directory(vlc_path)
+
+        if os.getenv('LANG') is None:
+            lang, enc = locale.getdefaultlocale()
+            os.environ['LANG'] = lang
     else:
         locale.bindtextdomain("atomudesktop", f"{data_dir}/mo")
         locale.textdomain("atomudesktop")
+
+    gettext.bindtextdomain("atomudesktop", f"{data_dir}/mo")
+    gettext.textdomain("atomudesktop")
 
     res = Gio.Resource.load(data_dir + "/client.gresource")
     Gio.Resource._register(res)
